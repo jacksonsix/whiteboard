@@ -1,0 +1,38 @@
+<html>
+  <head>
+    <script src="./simulator.js"></script>
+    <script src="./pushdown.js"></script>
+    <script src="./assembler.js"></script>
+    <script src="./sample.js"></script>
+  </head>
+  <body>
+    <div>
+      <canvas id="canvas"></canvas>
+    </div>
+    <script>
+      // test pushdown and simulator
+      let c =[];
+      c.push('start'); 
+      c.push('(circle  50 50  50)');
+      c.push('(rect 10 20 60 80)');
+      c.push('done');
+      console.log(c);
+      let codelbl = extractLabels(c);
+      let codes = codelbl['code'];
+      let lbl = codelbl['label'];
+      let pcodes =[];
+      codes.forEach(c => {
+          let f = pushdown(c);
+          pcodes.push(f);
+      });
+      let m = make_machine();
+    
+      let result = assembler(m,pcodes,lbl);
+      console.log(result.code);
+      m.load(['a'],result.code,result.labels,[]);
+      m.runStep();
+      
+    </script>
+
+  </body>
+</html>

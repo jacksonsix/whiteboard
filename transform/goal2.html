@@ -1,0 +1,139 @@
+<html>
+<head>
+
+<link rel="stylesheet" href="goal2.css">
+</head>
+   <script src="image.js"></script>
+   <script src="element.js"></script>
+   <script src="goal.js"></script>
+   <script src="goal1html.js"></script>
+<script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
+<body>
+
+<div id="addpicture">
+ <input type='file' name='img' size='65' id='uploadimage' />
+<input type='text' id='xpos'>x</input>
+<input type='text' id='ypos'>y</input>
+</div>
+<div id="holder">
+
+</div>
+
+
+<div class="dropdown">
+  <button class="dropbtn">Resize</button>
+  <div class="dropdown-content">
+    <a href="#">Rotate</a>
+    <a href="#">X strech</a>
+    <a href="#">Y strech</a>
+  </div>
+</div>
+
+<!--
+<iframe src="/svgedit/editor/svg-editor.html?extensions="
+    width="100%" height="100%"></iframe>
+-->
+
+<script>
+
+
+function enumAll(eid){
+        console.log($('#holder').position());
+        console.log($('#holder').outerHeight());
+	var ele = document.getElementById(eid);
+        console.log(ele.getBoundingClientRect());
+        var box = createElement('addpicture','div');
+        box.style['position'] ='absolute';
+        box.style['border-style'] = 'dotted';
+        box.style['left'] =ele.getBoundingClientRect().x;
+        box.style['top'] = ele.getBoundingClientRect().y;
+        box.style['width'] = ele.getBoundingClientRect().width;
+        box.style['height'] = ele.getBoundingClientRect().height; 
+        var node = document.getElementById("holder");
+        var curTransform = new   WebKitCSSMatrix(window.getComputedStyle(node).webkitTransform);
+        console.log( curTransform.m41); //real offset left
+         console.log(curTransform.m42); //real offset top
+        var ks =['offsetTop','offsetLeft','offsetWidth','offsetHeight']; 
+        ks.forEach(k => {
+	  if(ele[k] && ele[k] !=='' ){
+		console.log(k + ':' + ele[k]);
+	    }
+        });
+
+}
+
+      document.addEventListener("mousemove", evt =>{
+           posx = document.getElementById('xpos');
+           posy = document.getElementById('ypos');
+           posx.value = evt.clientX;
+           posy.value = evt.clientY;
+      });
+    // listen to user keyboard
+	document.addEventListener("keydown", event => {
+          console.log(event.keyCode);  //'KeyR'
+          
+	  if ( event.keyCode === 67) {  //key c ,combine
+            combine('div1','div3');
+	    
+	    return;
+	  }else if(event.keyCode === 83){  //key s , sperate
+          
+	    seperate('div3');   // from its parent, cannot from holder.
+	    return;
+          }else if(event.keyCode ===49){ // key p
+             canavsId = 'div1';
+             return;
+          }else if(event.keyCode ===51){ // key p
+             canavsId = 'div3';
+             return;
+          }else if(event.keyCode ===80){ // key p
+             enumAll('holder');
+             return;
+          }
+	  // do something
+	});
+</script>
+
+<!-- split 1 from container, reponse as 2 parts
+      combine 2 {cup,cake} , reponse as  1 .   -->
+<script>
+
+<!--- setup cupcake property to cake, so it will not answer any event.   -->
+<!--  combile the 2 boundingbox. so the bounding area expand a litte bit ?? -->
+<!--  scale/move/roate as one elment   -->
+
+function combine(cup,cake){
+  
+}
+
+function seperate(cake){
+
+}
+
+</script>
+
+<!-- dynamic add 2 pictures -->
+<script>
+   
+      //upload picture and draw
+    
+      //let dbconnect =  initdb()();
+      
+      document.getElementById("uploadimage").addEventListener("change", function() {
+      let plate =  createElement("holder","div");
+      let can =  createElement(plate.id,"canvas");
+      //set active in state
+      // let stat = getInstance();
+      // stat['setCurObj'](can.id);
+      //save object to store
+      //dbconnect["add"](can.id,can.id);
+      //draw UI
+      draw(can.id);
+      
+      }, false)
+
+   
+</script>
+
+</body>
+</html>

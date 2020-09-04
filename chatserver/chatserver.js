@@ -154,6 +154,7 @@ wsServer.on('request', function(request) {
           msg = JSON.parse(message.utf8Data);
           var connect = getConnectionForID(msg.id);
           // save msg to msgdb.txt file
+        
 	  msgstream.write(message.utf8Data + "\n");
           // Look at the received message type and
           // handle it appropriately.
@@ -165,7 +166,9 @@ wsServer.on('request', function(request) {
               msg.text = msg.text.replace(/(<([^>]+)>)/ig,"");
               break;
             //handle command here
-            case "load":
+            case "command":
+              msg.name = connect.username;
+	      if(msg.text ==='load'){
 	      console.log("receive load command");
 	      connection.sendUTF( JSON.stringify(msg));
               var readmsgstream = fs.createReadStream("msgdb.txt");
@@ -180,10 +183,10 @@ wsServer.on('request', function(request) {
 		  };
                   connection.sendUTF(JSON.stringify(loadmsg));
 	      });
-		break;
-            case "command":
-              msg.name = connect.username;
-              msg.text = msg.text.replace(/(<([^>]+)>)/ig,"");
+	      }else{
+ 		msg.text = msg.text.replace(/(<([^>]+)>)/ig,"");
+  	      }
+             
               break;
             // Username change request
             case "username":

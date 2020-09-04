@@ -62,7 +62,8 @@ function connect() {
         interp(msg);
         break;
       case "load":
-        text = "(" + timeStr + ") <b>" + msg.name + "</b>: " + msg.text + "<br>";
+        //text = "(" + timeStr + ") <b>" + msg.name + "</b>: " + msg.text + "<br>";
+	loadwork(msg);
         break;
       case "rejectusername":
         text = "<b>Your username has been set to <em>" + msg.name + "</em> because the name you chose is in use.</b><br>";
@@ -187,7 +188,15 @@ function filterEventType(event) {
   }		  
 }
 
+function loadwork(msg){
+	if(msg.type ==='load'){
+	  
+	   let cs =  msg.text.split("\n");
+	   cs.pop();
+	   cs.forEach(line => {loadinterp(line)});
 
+	}
+}
 
 
 

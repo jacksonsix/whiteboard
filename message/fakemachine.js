@@ -6,6 +6,11 @@ let dupcontext='';
 let users={};
 
 
+function loadinterp(cmd){
+	let c = JSON.parse(cmd);
+	interp(c);
+}
+
 
 function interp(cmd){
 	let curName = cmd['name'];

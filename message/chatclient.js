@@ -58,7 +58,7 @@ function connect() {
         text = "(" + timeStr + ") <b>" + msg.name + "</b>: " + msg.text + "<br>";
         break;
       case "command":
-        text = "(" + timeStr + ") <b>" + msg.name + "</b>: " + msg.text + "<br>";
+        text = "";
         interp(msg);
         break;
       case "load":
@@ -156,15 +156,12 @@ function makeCommand(status,evt){
 
 function sendCommand(command) {
   //console.log("***SEND");
-  var msg = {
-    text: 'blank',
-    type: "command",
-    id: clientID,
-    name: "a",
-    date: Date.now()
-  };
-  msg.action = command.action;
-  msg.parameters = command.parameters;
+  var msg = command;
+   msg.text = 'blank';
+   msg.type = 'command';
+   msg.id = clientID;
+   msg['name'] = 'a';
+   msg.date = Date.now();
 
   if(connection){
     connection.send(JSON.stringify(msg));

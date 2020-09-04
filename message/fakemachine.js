@@ -2,21 +2,29 @@
 // read in mhistory
 let dup='';
 let dupcontext='';
-let dupx=0;
-let dupy=0;
+
+let users={};
+
+
 
 function interp(cmd){
+	let curName = cmd['name'];
+	let curUser = getUserInfo(curName);
+	
         dup = document.getElementById("canvas");
 	dupcontext = dup.getContext('2d');
-	if(cmd.type =='mousedown'){
-		dupx = cmd.x;
-		dupy = cmd.y;	
+	if(cmd.evttype =='mousedown'){
+		updateUserInfo(curName,cmd);
               	
 	}else if(cmd.action =='drawline'){
+		let curUser = getUserInfo(curName);
+		let dupx=curUser.x;
+		let dupy=curUser.y;
 		drawLine(dupcontext, dupx, dupy, cmd.parameters[0], cmd.parameters[1]);
-
-		dupx = cmd.parameters[0];
-		dupy = cmd.parameters[1];
+		let d = {};
+		d.x = cmd.parameters[0];
+		d.y = cmd.parameters[1];
+		updateUserInfo(curName,d);
 	}else if(cmd.type =='mouseup'){
               
 	}else{
@@ -33,4 +41,24 @@ function drawLine(context, x1, y1, x2, y2) {
   context.lineTo(x2, y2);
   context.stroke();
   context.closePath();
+}
+
+function getUserInfo(user){
+	if(users[user]  && users[user] != null){
+		return users[user];
+	}else{
+		let a  = {};
+		a.x =0;
+		a.y = 0;
+		users[user] = a;
+		return users[user];
+	}
+}
+
+function updateUserInfo(user,data){
+	let info = getUserInfo(user);
+	info.x = data.x;
+	info.y = data.y;
+	users[user] = info;
+
 }

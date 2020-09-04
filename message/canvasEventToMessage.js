@@ -8,7 +8,7 @@ const myPics = document.getElementById('canvas');
 myPics.addEventListener('mousedown', e => {
   x = e.offsetX;
   y = e.offsetY;
-  msg = {'type':'mousedown'
+  msg = {'evttype':'mousedown'
 	,'x':x 
 	,'y':y
   };
@@ -21,7 +21,7 @@ myPics.addEventListener('mousemove', e => {
     //drawLine(context, x, y, e.offsetX, e.offsetY);
     x = e.offsetX;
     y = e.offsetY;
-    msg = {'type':'mousemove'
+    msg = {'evttype':'mousemove'
 	,'x':x 
 	,'y':y
 	};	
@@ -33,7 +33,7 @@ window.addEventListener('mouseup', e => {
     isDrawing = false;
     mhistory.forEach( function(msg){
        let m = msg.type +' x:'+ msg.x + 'y:' + msg.y +':' + count;	
-	//console.log(m);
+
 	});	
 	
 	mhistory.forEach(function(e){
@@ -41,11 +41,10 @@ window.addEventListener('mouseup', e => {
 		//interp(e);
                 // send out here. will change later
 	        //output command
-		var cmd = {
-		action:'drawline',
-		parameters:[e.x, e.y]
-		};
-		sendCommand(cmd);
+
+                e.action ='drawline';
+		e.parameters= [e.x,e.y];
+		//sendCommand(e);
                 //
 	});
 });
@@ -56,6 +55,9 @@ let mhistory =[];
 function publishEvt(msg){	
 	mhistory.push(msg);
 	count++;
+        msg.action = 'drawline';
+        msg.parameters = [msg.x, msg.y];
+	sendCommand(msg);
    
 }
 

@@ -735,3 +735,14 @@
 {"evttype":"mousemove","x":677,"y":281,"action":"drawline","parameters":[677,281],"text":"blank","type":"command","id":1599238049160,"name":"a","date":1599255746568}
 {"name":"3","date":1599255774302,"id":1599238049162,"type":"username"}
 {"text":"load","type":"command","id":1599238049162,"date":1599255776092}
+{"evttype":"mousedown","x":1015,"y":94,"action":"drawline","parameters":[1015,94],"text":"blank","type":"command","id":1599238049162,"name":"a","date":1599255866532}
+{"text":"load","type":"command","id":1599238049162,"date":1599256124124}
+{"text":"load","type":"command","id":1599238049162,"date":1599256126171}
+{"text":"load","type":"command","id":1599238049162,"date":1599256126738}
+{"text":"load","type":"command","id":1599238049162,"date":1599256127234}
+{"text":"load","type":"command","id":1599238049162,"date":1599256127746}
+{"text":"load","type":"command","id":1599238049162,"date":1599256128249}
+{"text":"load","type":"command","id":1599238049162,"date":1599256129161}
+{"text":"load","type":"command","id":1599238049162,"date":1599256129457}
+{"text":"load","type":"command","id":1599238049162,"date":1599256129721}
+{"text":"load","type":"command","id":1599238049162,"date":1599256129969}

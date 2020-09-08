@@ -1,4 +1,5 @@
-  function draw(canvasId) {
+
+ function draw(canvasId) {
 	      var ctx = document.getElementById(canvasId).getContext('2d')
 	      , img = new Image()
 	      , f = document.getElementById("uploadimage").files[0]
@@ -10,16 +11,16 @@
 	      ctx.drawImage(img,0,0);
 	      url.revokeObjectURL(src);
 	      }
-      }
+}
 
-       function sendToserver(){
-	
+function sendToserver(){
+
 	const fileList = this.files;
 	var file = files[0];
 	const reader = new FileReader();
 	reader.onload = (function(aImg) { return function(e) { aImg.src = e.target.result; }; })(img);
 	reader.readAsDataURL(file);
-       }
+}
 
 
 const fileSelect = document.getElementById("fileSelect"),
@@ -92,6 +93,11 @@ function FileUpload(img, file) {
       }, false);
   xhr.open("POST", "http://localhost:9081/fileupload");
   xhr.overrideMimeType('text/plain; charset=x-user-defined-binary');
+  xhr.onreadystatechange = function() {
+    if (xhr.readyState === 4) {
+      console.log('done');
+    }
+  }
   reader.onload = function(evt) {
     xhr.send(evt.target.result);
   };

@@ -1,0 +1,5 @@
+file service, and other serice also use chatservice.
+so they can talk to each other.
+
+file service as a  chat client.
+

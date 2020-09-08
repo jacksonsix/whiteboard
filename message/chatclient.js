@@ -62,7 +62,6 @@ function connect() {
         interp(msg);
         break;
       case "load":
-        //text = "(" + timeStr + ") <b>" + msg.name + "</b>: " + msg.text + "<br>";
 	loadwork(msg);
         break;
       case "rejectusername":

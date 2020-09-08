@@ -22,25 +22,22 @@ const server = http.createServer((req, res) => {
 		//	});
 		//res.write('done');
 		//res.end();
+                // chat service here to confirm to chat server.
 	 	console.log('uploaded ' + files.myFile.name);
 	});
     });
  
     return;
   }
- 
-  // show a file upload form
-  res.writeHead(200, { 'content-type': 'text/html' 
-	, 'Access-Control-Allow-Origin': '*'
+  // other wise serve a file to client
+  console.log(req.url)
+  var files = fs.createReadStream(req.url);
+  //res.writeHead(200, {'Content-disposition': 'attachment; filename=package.json"}'}); //here you can specify file name
+  files.pipe(res); // also you can set content-type
+  res.writeHead(200, { 'Content-disposition': 'attachment', 
+	               'Access-Control-Allow-Origin': '*'
 	});
-  res.end(`
-    <h2>With Node.js <code>"http"</code> module</h2>
-    <form action="/api/upload" enctype="multipart/form-data" method="post">
-      <div>Text field title: <input type="text" name="title" /></div>
-      <div>File: <input type="file" name="multipleFiles" multiple="multiple" /></div>
-      <input type="submit" value="Upload" />
-    </form>
-  `);
+  
 });
  
 server.listen(9081, () => {

@@ -1,31 +1,39 @@
-const http = require('http');
+
 const fs = require('fs');
-const fileserver = require('formidable');
 
-const requestListener = function (req, res) {
-  
-var codepath='';
-
-  //res.write('Hello World!');
-  console.log(req.url);
-  if (req.url.indexOf('/fileupload') > 0) {
-    var form = new fileserver.IncomingForm();
-    form.parse(req, function (err, fields, files) {
-      var oldpath = files.filetoupload.path;
-      console.log(oldpath);
-      console.log(files.filetoupload.name);
-      var newpath = '/home/whiteboard/code/product/fileserver/uploads/' + '22.svg';
-        fs.rename(oldpath, newpath, function (err) {
-	if (err) throw err;
-	res.write('File uploaded and moved!');
-	res.end();
-      });
-
-   });
+const http = require('http');
+const formidable = require('formidable');
+ 
+const server = http.createServer((req, res) => {
+  if (req.url.indexOf('/fileupload') >0 && req.method.toLowerCase() === 'post') {
+    // parse a file upload
+    const form = formidable({ multiples: true });
+ 
+    form.parse(req, (err, fields, files) => {
+      res.writeHead(200, { 'content-type': 'application/json' 
+	, 'Access-Control-Allow-Origin': '*'
+	});
+      res.end(JSON.stringify({ fields, files }, null, 2));
+    });
+ 
+    return;
   }
-  
-}
+ 
+  // show a file upload form
+  res.writeHead(200, { 'content-type': 'text/html' 
+	, 'Access-Control-Allow-Origin': '*'
+	});
+  res.end(`
+    <h2>With Node.js <code>"http"</code> module</h2>
+    <form action="/api/upload" enctype="multipart/form-data" method="post">
+      <div>Text field title: <input type="text" name="title" /></div>
+      <div>File: <input type="file" name="multipleFiles" multiple="multiple" /></div>
+      <input type="submit" value="Upload" />
+    </form>
+  `);
+});
+ 
+server.listen(9081, () => {
+  console.log('Server listening on http://localhost:9081/ ...');
+});
 
-const server = http.createServer(requestListener);
-console.log("file service listen to 9081");
-server.listen(9081);

@@ -109,6 +109,14 @@ function sendUserListToAll() {
   }
 }
 
+function sendMsgToAll(msgString,senderId){
+	var i=0;
+	for (i=0; i<connectionArray.length; i++) {
+	if ( senderId && connectionArray[i].clientID === senderId){ continue;}
+	  connectionArray[i].sendUTF(msgString);
+	}
+}
+
 console.log("***CRETING REQUEST HANDLER");
 wsServer.on('request', function(request) {
   console.log("Handling request from " + request.origin);
@@ -164,13 +172,16 @@ wsServer.on('request', function(request) {
             case "message":
               msg.name = connect.username;
               msg.text = msg.text.replace(/(<([^>]+)>)/ig,"");
+	     if(msg.text==='loadpicture'){
+		 console.log("receive load picture command");
+		 sendToClients = false;
+              }
               break;
             //handle command here
             case "command":
               msg.name = connect.username;
 	      if(msg.text ==='load'){
 	      console.log("receive load command");
-	      connection.sendUTF( JSON.stringify(msg));
               var readmsgstream = fs.createReadStream("msgdb.txt");
 	      readmsgstream.on('data', function (chunk) {
 		    // This just pipes the read stream to the response object (which goes to the client)
@@ -183,7 +194,7 @@ wsServer.on('request', function(request) {
 		  };
                   connection.sendUTF(JSON.stringify(loadmsg));
 	      });
-	      }else{
+	      }else {
  		msg.text = msg.text.replace(/(<([^>]+)>)/ig,"");
   	      }
              
@@ -220,15 +231,12 @@ wsServer.on('request', function(request) {
 
           // Convert the message back to JSON and send it out
           // to all clients.
-
+	  var msgString = JSON.stringify(msg);
           if (sendToClients) {
-            var msgString = JSON.stringify(msg);
-            var i;
-
-            for (i=0; i<connectionArray.length; i++) {
-              connectionArray[i].sendUTF(msgString);
-            }
-          }
+   	    sendMsgToAll(msgString);
+          }else{
+	    sendMsgToAll(msgString,msg.uploader);
+	  }
       }
   });
   

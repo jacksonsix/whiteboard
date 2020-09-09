@@ -91,7 +91,7 @@ function FileUpload(img, file) {
           const canvas = self.ctrl.ctx.canvas;
           canvas.parentNode.removeChild(canvas);
       }, false);
-  xhr.open("POST", "http://localhost:9081/fileupload");
+  xhr.open("POST", "http://localhost:9081/fileupload/98");
   xhr.overrideMimeType('text/plain; charset=x-user-defined-binary');
   xhr.onreadystatechange = function() {
     if (xhr.readyState === 4) {

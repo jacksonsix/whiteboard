@@ -13,15 +13,6 @@
 	      }
 }
 
-function sendToserver(){
-
-	const fileList = this.files;
-	var file = files[0];
-	const reader = new FileReader();
-	reader.onload = (function(aImg) { return function(e) { aImg.src = e.target.result; }; })(img);
-	reader.readAsDataURL(file);
-}
-
 
 const fileSelect = document.getElementById("fileSelect"),
     fileElem = document.getElementById("fileElem"),
@@ -58,48 +49,26 @@ function handleFiles() {
       const info = document.createElement("span");
       info.innerHTML = this.files[i].name + ": " + this.files[i].size + " bytes";
       li.appendChild(info);
+      //send to file server
+      sendFile(this.files[i]);
     }
   }
 }
 
 
-function sendFiles() {
-  const imgs = document.querySelectorAll(".obj");
-  
-  for (let i = 0; i < imgs.length; i++) {
-    new FileUpload(imgs[i], imgs[i].file);
-  }
-}
-
-
-function FileUpload(img, file) {
-  const reader = new FileReader();  
-  this.ctrl = createThrobber(img);
-  const xhr = new XMLHttpRequest();
-  this.xhr = xhr;
-  
-  const self = this;
-  this.xhr.upload.addEventListener("progress", function(e) {
-        if (e.lengthComputable) {
-          const percentage = Math.round((e.loaded * 100) / e.total);
-          self.ctrl.update(percentage);
+function sendFile(file) {
+    const uri = "http://localhost:9081/fileupload/98";
+    const xhr = new XMLHttpRequest();
+    const fd = new FormData();
+    
+    xhr.open("POST", uri, true);
+    xhr.onreadystatechange = function() {
+        if (xhr.readyState == 4 && xhr.status == 200) {
+            //alert(xhr.responseText); // handle response.
+	    console.log('upload success');
         }
-      }, false);
-  
-  xhr.upload.addEventListener("load", function(e){
-          self.ctrl.update(100);
-          const canvas = self.ctrl.ctx.canvas;
-          canvas.parentNode.removeChild(canvas);
-      }, false);
-  xhr.open("POST", "http://localhost:9081/fileupload/98");
-  xhr.overrideMimeType('text/plain; charset=x-user-defined-binary');
-  xhr.onreadystatechange = function() {
-    if (xhr.readyState === 4) {
-      console.log('done');
-    }
-  }
-  reader.onload = function(evt) {
-    xhr.send(evt.target.result);
-  };
-  reader.readAsBinaryString(file);
+    };
+    fd.append('myFile', file);
+    // Initiate a multipart/form-data upload
+    xhr.send(fd);
 }

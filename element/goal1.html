@@ -14,21 +14,14 @@
     </style>
   </head>
   <body>
-<span>upload file</span>
-<form action="fileupload" method="post" enctype="multipart/form-data">
-	<input type="file" id="uploadinput" name="filetoupload">
-	
-</form>   
-<div><input type="submit" value="Send file" onclick="sendFiles()"></div> 
-<p>another pic list here</p>
 
 <input type="file" id="fileElem" multiple accept="image/*" style="display:none">
-<a href="#" id="fileSelect">Select some files</a> 
+<a href="#" id="fileSelect">Select some pictures</a> 
 <div id="fileList">
-  <p>No files selected!</p>
+  <p>No pictures selected!</p>
 </div>
  <div>
-        <div id="dropzone" style="margin:30px; width:500px; height:300px; border:1px dotted grey;">Drag & drop your file</div>
+        <div id="dropzone" style="margin:30px; width:150px; height:130px; border:1px dotted grey;">Drag & drop your file</div>
     </div>
 <span>note</span>
     
@@ -148,22 +141,7 @@
     </script>
 
     <script>
-        function sendFile(file) {
-            const uri = "http://localhost:9081/fileupload/98";
-            const xhr = new XMLHttpRequest();
-            const fd = new FormData();
-            
-            xhr.open("POST", uri, true);
-            xhr.onreadystatechange = function() {
-                if (xhr.readyState == 4 && xhr.status == 200) {
-                    //alert(xhr.responseText); // handle response.
-		    console.log('upload success');
-                }
-            };
-            fd.append('myFile', file);
-            // Initiate a multipart/form-data upload
-            xhr.send(fd);
-        }
+
 
  	window.onload = function() {
             const dropzone = document.getElementById("dropzone");

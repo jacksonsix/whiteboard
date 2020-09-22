@@ -32,7 +32,7 @@ function handleFiles() {
     fileList.innerHTML = "<p>No files selected!</p>";
   } else {
     fileList.innerHTML = "";
-    const list = document.createElement("ul");
+    const list = document.getElementById("container");
     fileList.appendChild(list);
     for (let i = 0; i < this.files.length; i++) {
       const li = document.createElement("li");
@@ -41,14 +41,15 @@ function handleFiles() {
       const img = document.createElement("img");
       img.src = URL.createObjectURL(this.files[i]);
       img.classList.add("obj");
+      img.id = 'img'+ i;
       img.height = 60;
       img.onload = function() {
         URL.revokeObjectURL(this.src);
       }
       li.appendChild(img);
-      const info = document.createElement("span");
-      info.innerHTML = this.files[i].name + ": " + this.files[i].size + " bytes";
-      li.appendChild(info);
+      //const info = document.createElement("span");
+      //info.innerHTML = this.files[i].name + ": " + this.files[i].size + " bytes";
+      //li.appendChild(info);
       //send to file server
       sendFile(this.files[i]);
     }
@@ -57,7 +58,9 @@ function handleFiles() {
 
 
 function sendFile(file) {
-    const uri = "http://localhost:9081/fileupload/98";
+    const cid = window.sessionStorage.getItem('cid');
+    console.log("cid is " + cid);
+    const uri = "http://localhost:9081/fileupload/" + cid;
     const xhr = new XMLHttpRequest();
     const fd = new FormData();
     

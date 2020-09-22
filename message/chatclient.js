@@ -2,6 +2,10 @@
 var connection = null;
 var clientID = 0;
 
+function getCid(){
+   return clientID;
+}
+
 function setUsername() {
   console.log("***SETUSERNAME");
   var msg = {
@@ -13,6 +17,17 @@ function setUsername() {
   connection.send(JSON.stringify(msg));
 }
 
+
+function loadpic(){
+  var msg = {
+    name: document.getElementById("name").value,
+    date: Date.now(),
+    id: clientID,
+    type: "message",
+    text:"load pic"
+  };
+  connection.send(JSON.stringify(msg));
+}
 function connect() {
   var serverUrl;
   var scheme = "ws";
@@ -50,19 +65,27 @@ function connect() {
       case "id":
         clientID = msg.id;
         setUsername();
+        console.log('first cid is ' + clientID);
+        window.sessionStorage.setItem('cid',clientID);
         break;
       case "username":
         text = "<b>User <em>" + msg.name + "</em> signed in at " + timeStr + "</b><br>";
         break;
       case "message":
         text = "(" + timeStr + ") <b>" + msg.name + "</b>: " + msg.text + "<br>";
-        break;
-      case "command":
-        text = "";
-        interp(msg);
-        break;
-      case "load":
-	loadwork(msg);
+        if(msg.name ==="fileServer"){
+           let cid = msg.text.substring(msg.text.indexOf(":") + 1);
+           let userid = window.sessionStorage.getItem('cid');
+           if(cid === userid){
+             loadpic();
+           }
+        }
+        if(msg.subtype && msg.subtype==='load'){
+	  loadwork(msg);
+        }
+        if(msg.subtype==='command'){
+	   interp(msg);
+	}
         break;
       case "rejectusername":
         text = "<b>Your username has been set to <em>" + msg.name + "</em> because the name you chose is in use.</b><br>";
@@ -103,8 +126,9 @@ function sendmouse(evttxt) {
   var msg = {
     text: evttxt,
     type: "message",
+    subtype:"command",
     id: clientID,
-    name: "a",
+    name: clientID,
     date: Date.now()
   };
   if(connection){
@@ -118,7 +142,7 @@ function load(){
   console.log("***SEND");
   var msg = {
     text: "load",
-    type: "command",
+    subtype: "load",
     id: clientID,
     date: Date.now()
   };
@@ -158,9 +182,10 @@ function sendCommand(command) {
   //console.log("***SEND");
   var msg = command;
    msg.text = 'blank';
-   msg.type = 'command';
+   msg.type='message';
+   msg.subtype = 'command';
    msg.id = clientID;
-   msg['name'] = 'a';
+   msg['name'] = clientID;
    msg.date = Date.now();
 
   if(connection){

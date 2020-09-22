@@ -176,29 +176,28 @@ wsServer.on('request', function(request) {
 		 console.log("receive load picture command");
 		 sendToClients = false;
               }
-              break;
-            //handle command here
-            case "command":
-              msg.name = connect.username;
-	      if(msg.text ==='load'){
-	      console.log("receive load command");
-              var readmsgstream = fs.createReadStream("msgdb.txt");
-	      readmsgstream.on('data', function (chunk) {
+             if(msg.subtype ==="load"){
+                 msg.name = connect.username;
+	         if(msg.text ==='load'){
+	            console.log("receive load command");
+                    var readmsgstream = fs.createReadStream("msgdb.txt");
+	             readmsgstream.on('data', function (chunk) {
 		    // This just pipes the read stream to the response object (which goes to the client)
 		    //readStream.pipe(res);
-                  console.log(chunk.toString());
-		  var loadmsg={
-		      type:"load",
-		      text: chunk.toString()
+                        console.log(chunk.toString());
+		        var loadmsg={
+		           type:"message",
+		           subtype:"load",
+		           text: chunk.toString()
 		      
-		  };
-                  connection.sendUTF(JSON.stringify(loadmsg));
-	      });
-	      }else {
- 		msg.text = msg.text.replace(/(<([^>]+)>)/ig,"");
-  	      }
-             
+		          };
+                     connection.sendUTF(JSON.stringify(loadmsg));
+	              });
+
+                 }
+	      }
               break;
+
             // Username change request
             case "username":
               var nameChanged = false;

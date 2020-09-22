@@ -3,3 +3,13 @@ so they can talk to each other.
 
 file service as a  chat client.
 
+upload picture steps:
+1. choose pictures from local 
+2. create ul/li on local browser
+3. img to url
+4. send file to fileserver
+5. when done. fileserver send finish message to uploader
+6. uploader to send create ul/li to all
+7. other group members receive msg.
+ 
+

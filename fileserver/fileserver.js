@@ -5,7 +5,7 @@ const http = require('http');
 const formidable = require('formidable');
 const {URLSearchParams} = require('url');
 
-const chatservice = require('/home/whiteboard/code/product/chatserver/serviceclient.js');
+const chatservice = require('/Users/bigtree/code/whiteboard/chatserver/serviceclient.js');
  
 const server = http.createServer((req, res) => {
   if (req.url.indexOf('/fileupload') >=0 && req.method.toLowerCase() === 'post') {
@@ -17,7 +17,7 @@ const server = http.createServer((req, res) => {
     form.parse(req, (err, fields, files) => {
         //console.log(files.myFile);
         var oldpath = files.myFile.path;
-	var newpath='/home/whiteboard/code/product/fileserver/uploads/' + files.myFile.name ;
+	var newpath='/Users/bigtree/code/whiteboard/fileserver/uploads/' + files.myFile.name ;
 	fs.rename(oldpath,newpath,function(err){
 		if(err) throw err;
                 // chat service here to confirm to chat server.

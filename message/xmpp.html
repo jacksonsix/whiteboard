@@ -34,10 +34,23 @@
 		}
             },
 	    send: function(txt){
-		var msg = converse.env.$msg({from:  'tom@whiteboard-k42jz', to:'jianlong@whiteboard-k42jz', type: 'chat'})
+		var me = _converse.api.user.jid();
+		me = me.substring(0,me.indexOf('@'));
+		var fromp = '';
+		var top ='';
+		
+		if(me ==='tom'){
+		    fromp ='tom@whiteboard-k42jz';
+		    top = 'jianlong@whiteboard-k42jz';
+		}else{
+		    top ='tom@whiteboard-k42jz';
+		    fromp = 'jianlong@whiteboard-k42jz';
+		}
+		var msg = converse.env.$msg({from: fromp, to: top, type: 'chat'})
 		    .c('body')
 		    .t('$$$' + txt);
-		    _converse.api.send(msg);
+		_converse.api.send(msg);	
+	
 	    },
 	    outmessage: onmessage
 	};

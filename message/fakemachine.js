@@ -5,6 +5,37 @@ let dupcontext='';
 
 let users={};
 
+var machine={};
+machine.createnote = null;
+machine.write = null;
+
+function notep(cmd,canvname){
+    let curName = cmd['name'];
+    let curUser = getUserInfo(curName);
+    if(cmd.type !='note'){return;}
+   
+    if(cmd.evt ==='click'){
+	machine.createnote(cmd,canvname);
+    }else if(cmd.evt ==='keydown'){
+	machine.write(cmd);
+    }
+
+}
+
+function highlight(cmd,canvname){
+    let curName = cmd['name'];
+    let curUser = getUserInfo(curName);
+    if(cmd.type !='note'){return;}
+    dup = document.getElementById(canvname);
+    dupcontext = dup.getContext('2d');
+    //ctx.globalAlpha = 0.4;
+    if(cmd.evt ==='click'){
+	console.log('generate note');
+    }else if(cmd.evt ==='keydown'){
+	cosole.log('send keydown evt to note');
+    }
+
+}
 
 function loadinterp(cmd){
         let c = JSON.parse(cmd);
@@ -68,3 +99,5 @@ function updateUserInfo(user,data){
 	users[user] = info;
 
 }
+
+

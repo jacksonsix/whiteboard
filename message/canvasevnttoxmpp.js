@@ -1,49 +1,50 @@
 
 // get event out
 
-let isDrawing = false;
-let x = 0;
-let y = 0; 
 const myPics = document.getElementById('canvas');
 
 myPics.addEventListener('mousedown', e => {
-  x = e.offsetX;
-  y = e.offsetY;
-    msg = {'type':'draw',
-	   'evt':'mousedown'
-	,'x':x 
-	,'y':y
-  };
-  isDrawing = true;
-  publishEvt(msg);
-});
 
-myPics.addEventListener('mousemove', e => {
-  if (isDrawing === true) {
-    x = e.offsetX;
-    y = e.offsetY;
-      msg = {'type':'draw',
-	     'evt':'mousemove'
-	,'x':x 
-	,'y':y
-	};	
-    publishEvt(msg);	
-  }
-});
-
-window.addEventListener('mouseup', e => {
-    isDrawing = false;
-    x = e.offsetX;
-    y = e.offsetY;
-    msg = {'type':'draw',
-	'evt':'mouseup'
-	,'x':x 
-	,'y':y
-	};	
+    msg = {
+	'evt':'mousedown'
+	,'x':e.offsetX 
+	,'y':e.offsetY
+    };
+    
     publishEvt(msg);
 });
 
+myPics.addEventListener('mousemove', e => {
+    
+    msg = {
+	'evt':'mousemove'
+	,'x': e.offsetX 
+	,'y':e.offsetY
+    };	
+    publishEvt(msg);	
+    
+});
 
+
+myPics.addEventListener('click', e => {
+    
+    msg = {
+	   'evt':'click'
+	   ,'x':e.offsetX 
+	   ,'y':e.offsetY
+	  };	
+    publishEvt(msg);
+});
+
+window.addEventListener('mouseup', e => {
+    
+    msg = {
+	'evt':'mouseup'
+	,'x':e.offsetX 
+	,'y':e.offsetY
+    };	
+    publishEvt(msg);
+});
 
 ///////////////////////////////////////////////////////////////////////////////////////
 
@@ -54,20 +55,14 @@ window.addEventListener('mouseup', e => {
 ///////////////////////////////////////////////////////////////////////////////////////
 
 function sermsg(msg){
-    var text='';
-    for (var name in msg) {
-	if (msg.hasOwnProperty(name)) {
-	    text += msg[name] +',';
-        }
-    }
-    return text.substring(0,text.length-1);
+   
+    return JSON.stringify(msg);
 }
-function dsermsg(xml){
+function extractmsg(xml){
     var start = xml.indexOf('>') + 1;
     var end = xml.indexOf('</body>');
     var msg = xml.substring(start,end);
-    //msg= msg.split(',');
-    return msg;
+    return msg.substring(3);
 }
 function loadpic(){
   var msg = {
@@ -79,14 +74,15 @@ function loadpic(){
 function msghandler(evt) {
     console.log(evt);
     var text = "";
-    var info = dsermsg(evt);
-    var msg ={};
-    msg.type = info.substring(3,7);
-    var t = info.substring(8).split(',');
-    msg.evt = t[0];
-    msg.x = t[1];
-    msg.y = t[2];
+    var info = extractmsg(evt);
+    var msg =JSON.parse(info);
+   
     switch(msg.type) {
+    case "mark":
+	break;
+    case "note":
+	notep(msg,'canvas');
+	break;
     case "file":
            //let cid = msg.text.substring(msg.text.indexOf(":") + 1);
            //let userid = window.sessionStorage.getItem('cid');

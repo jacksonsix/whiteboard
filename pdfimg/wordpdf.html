@@ -2,175 +2,195 @@
   <head>
     <style>
       .user {
-      width: 100px;
-      height: 100px;
-      border: 1px solid blue;
-      position: absolute;
-      opacity:0.7
+	  width: 150px;
+	  height: 100px;
+	  border: 1px solid blue;
+	  position: absolute;
+	  opacity:0.7
       }
-     .leftcorner{
-        display: inline-block;
-        position: relative;
-	left:-3px;
-	top: -30px;
-     }
+      .leftcorner{
+	  height: 10%;
+	  width: 100%;
+	  background-color: yellow;
+	  -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
+	  -moz-box-sizing: border-box;    /* Firefox, other Gecko */
+	  box-sizing: border-box;         /* Opera/IE 8+ */          
+      }
 
-    .tool {
-	position: absolute;
-	top: 0;
-        left: 0;
-        p {
-	display: inline-block;
-	width: 50 px;
-        }
-    }
-
-	
+      .tool {
+	  position: absolute;
+	  top: 0;
+          left: 0;
+          p {
+	      width: 50 px;
+          }
+      }
+      textarea{
+	  height: 90%;
+	  width: 100%;
+	  -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
+	  -moz-box-sizing: border-box;    /* Firefox, other Gecko */
+	  box-sizing: border-box;         /* Opera/IE 8+ */
+      }
+      
     </style>
 
     <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <link rel="stylesheet" type="text/css" media="screen" href="https://cdn.conversejs.org/6.0.0/dist/converse.min.css">
+
   </head>
   <body>
-  
-<canvas id="the-canvas" style="border: 1px solid black; direction: ltr;"></canvas>
-<script src="./build/pdf.js"></script>
-<script id="script">
-
-  var url = './a.pdf';
-
-  //
-  // The workerSrc property shall be specified.
-  //
-  pdfjsLib.GlobalWorkerOptions.workerSrc ='./build/pdf.worker.js';
-
-  //
-  // Asynchronous download PDF
-  //
-  var loadingTask = pdfjsLib.getDocument(url);
-  loadingTask.promise.then(function(pdf) {
-    //
-    // Fetch the first page
-    //
-    pdf.getPage(2).then(function(page) {
-      var scale = 1.5;
-      var viewport = page.getViewport({ scale: scale, });
-
-      //
-      // Prepare canvas using PDF page dimensions
-      //
-      var canvas = document.getElementById('the-canvas');
-      var context = canvas.getContext('2d');
-      canvas.height = viewport.height;
-      canvas.width = viewport.width;
-
-      //
-      // Render PDF page into canvas context
-      //
-      var renderContext = {
-        canvasContext: context,
-        viewport: viewport,
-      };
-      page.render(renderContext);
-    });
-  });
-</script>	
-
-
     <div id="plate" class="tool">
-	<p id="newtext">plate</p> <p id="newimg">img</p>
+      <select id="status">
+	<option>note</option>
+	<option>highlight</option>
+	<option>draw</option>
+	<option selected="selected">default</option>
+      </select>
     </div>
-
+    <div>
+      <canvas id="canvas" style="border: 1px solid black; direction: ltr;"></canvas>
+    </div>
+    <script src="https://cdn.conversejs.org/6.0.0/dist/converse.min.js" charset="utf-8"></script>
+    <script src="./build/pdf.js"></script>
+    <script src="./../message/xmpp.js"></script>
+    <script src="./../message/canvasevnttoxmpp.js"></script>
+    <script src="./../message/fakemachine.js"></script>
     <script>
-	$( function() {
-	//$( "#plate" ).draggable();
-	} );
+      var msger =  mplugin;
+      mplugin.outmessage = msghandler;
+      function publishEvt(msg){	
+	 // mhistory.push(msg);
+	  // count++;
+	  let sta = document.getElementById('status');
+	  if(sta.value ==='default'){
+	      return;
+	  }else if(sta.value ==='note'){
+	      if(msg.evt =='mousemove' || msg.evt ==='mouseup'){ return;  }
+	  }
+	  msg.type = sta.value;
+	  msger.send(sermsg(msg));
+	  custEvt(sermsg(msg));
+      }
+
+      function custEvt(msg){
+	  const event = new CustomEvent('localevt', { detail: msg });
+	  document.dispatchEvent(event);
+      }
+
+      document.addEventListener('localevt',function(evt){
+	  var msg = evt.detail;
+	  var fake ='<body>$$$' + msg +'</body>';
+	  msghandler(fake);
+      });
     </script>
     <script>
-      let status ='default';
-      let focus = null;
-      
-      let newtext = document.getElementById('newtext');
-      newtext.addEventListener('click',function(evt){
-	
+
+      var url = './a.pdf';
+
+      //
+      // The workerSrc property shall be specified.
+      //
+      pdfjsLib.GlobalWorkerOptions.workerSrc ='./build/pdf.worker.js';
+
+      //
+      // Asynchronous download PDF
+      //
+      var loadingTask = pdfjsLib.getDocument(url);
+      loadingTask.promise.then(function(pdf) {
+	  //
+	  // Fetch the first page
+	  //
+	  pdf.getPage(2).then(function(page) {
+	      var scale = 1.5;
+	      var viewport = page.getViewport({ scale: scale, });
+
+	      //
+	      // Prepare canvas using PDF page dimensions
+	      //
+	      var canvas = document.getElementById('canvas');
+	      var context = canvas.getContext('2d');
+	      canvas.height = viewport.height;
+	      canvas.width = viewport.width;
+
+	      //
+	      // Render PDF page into canvas context
+	      //
+	      var renderContext = {
+		  canvasContext: context,
+		  viewport: viewport,
+	      };
+	      page.render(renderContext);
+	  });
       });
-      function test(left,top){
-      let can = document.createElement("canvas");
-      can.id = 'c'+ left + ' ' + top;
-      can.style['left'] = left;
-      can.style['top'] = top;
-      let plate = document.getElementById("plate");
-      plate.appendChild(can);
-      let ctx = can.getContext("2d");
-     // ctx.beginPath();
-     // ctx.moveTo(0,0);
-     // ctx.lineTo(20,20);
-     // ctx.lineTo(30,80);
-      // ctx.fill();
-      ctx.font = '48px serif';
-      ctx.textBaseline = 'hanging';
-      ctx.fillText('Hello world', 0, 100);
+    </script>	
+
+    <script>
+      function createnote(evt,canvaname){
+	  addTextBox(evt.x,evt.y);
+      }
+      function write(evt){
+
       }
 
+      machine.createnote = createnote;
+      machine.write = write;
+
       function addTextBox(left,top){
-      let can = document.createElement("textarea");
-      //can.id = 'c'+ left + '' + top;
-      can.classList.add('user');
-      //can.classList.add("ui-draggable");
-      //can.classList.add("ui-draggable-handle");
-      //can.style['left'] = left;
-      //can.style['top'] = top;
-      let t = document.createElement("div");
-      t.id = 'c'+ left + '' + top;
-      let point = document.createElement("p");
-      point.classList.add('leftcorner');
-      point.innerHTML='drag';
-      t.appendChild(point);
-      t.appendChild(can);
-      let plate = document.getElementById("plate");
-      plate.appendChild(t);
-      $( "#"+t.id ).draggable();
+
+	  let t = document.createElement("div");
+	  t.id = 'c'+ left + '' + top;
+	  t.style['left'] = left;
+	  t.style['top'] = top;
+	  t.classList.add('user');
+
+	  let can = document.createElement("textarea");
+	  can.id = 't' + t.id;
+	  can.addEventListener('keydown',function(evt){
+	      msg = {
+		  'evt':'keydown'
+		  ,'key':evt.key 
+		  ,'keyCode':evt.keyCode
+		  ,'id':can.id
+	      };
+	      
+	      publishEvt(msg);
+	  });
+	  let point = document.createElement("div");
+	  point.classList.add('leftcorner');
+	  t.appendChild(point);
+	  t.appendChild(can);
+	  let plate = document.getElementById("plate");
+	  plate.appendChild(t);
+	  $( "#"+t.id ).draggable();
       }
       
-      document.addEventListener('mousemove',evt =>{
-	      if(status ==='default'){
-		
-	      }else if(status ==='move'){
-		//focus.style['left'] = evt.clientX;
-		//focus.style['top'] = evt.clientY;
-	      }
-      });
-      document.addEventListener('mouseup',(evt) =>{ status='default'; });
-      document.addEventListener('mousedown',(evt) => {
-	focus = getBox(evt) ;	
-	status ='move';
-	});
-      document.addEventListener('click',processEvt);
+     
+      //document.addEventListener('click',processEvt);
       
       function getBox(evt){
-        let boxes = document.getElementsByClassName('user');
-        for(var i=0;i<boxes.length;i++){
-		     let box = boxes[i];
-		     let rect = box.getBoundingClientRect();
-		     if(evt.clientX > rect.left
-                        	 && evt.clientX <rect.left + rect.width
-				 && evt.clientY > rect.top
-	                         && evt.clientY < rect.top + rect.height){
-						  return box;}
-						  }
-						  return null;
+          let boxes = document.getElementsByClassName('user');
+          for(var i=0;i<boxes.length;i++){
+	      let box = boxes[i];
+	      let rect = box.getBoundingClientRect();
+	      if(evt.clientX > rect.left
+                 && evt.clientX <rect.left + rect.width
+		 && evt.clientY > rect.top
+	         && evt.clientY < rect.top + rect.height){
+		  return box;}
+	  }
+	  return null;
       }
       function processEvt(evt){
-	let cur = getBox(evt) ;
-	if(cur != null){
-		// set focus here
-		//focus = cur;
-	}else{
-		let left = evt.clientX;
-		let top  = evt.clientY;
-		addTextBox(left,top);
-	}
- 
+	  let sta = document.getElementById('status');
+	  if(sta.value !== 'note'){ return;}
+	  let cur = getBox(evt) ;
+	  if(cur == null){	      
+	      let left = evt.clientX;
+	      let top  = evt.clientY;
+	      addTextBox(left,top);
+	  }	  
       }
     </script>
   </body>

@@ -63,9 +63,9 @@ function sermsg(msg){
     return text.substring(0,text.length-1);
 }
 function dsermsg(xml){
-    var start = xml.indexOf('<body>') + 6;
+    var start = xml.indexOf('>') + 1;
     var end = xml.indexOf('</body>');
-    var msg = xml.substring(start,end-start);
+    var msg = xml.substring(start,end);
     //msg= msg.split(',');
     return msg;
 }
@@ -79,11 +79,13 @@ function loadpic(){
 function msghandler(evt) {
     console.log(evt);
     var text = "";
-    var msg = dsermsg(evt);
-    msg.type = msg.substring(0,4);
-    var info = msg.substring(8).split(',');
-    msg.evt = info[0];
-    msg.detail = info;
+    var info = dsermsg(evt);
+    var msg ={};
+    msg.type = info.substring(3,7);
+    var t = info.substring(8).split(',');
+    msg.evt = t[0];
+    msg.x = t[1];
+    msg.y = t[2];
     switch(msg.type) {
     case "file":
            //let cid = msg.text.substring(msg.text.indexOf(":") + 1);

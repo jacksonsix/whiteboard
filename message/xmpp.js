@@ -1,6 +1,7 @@
 	const mplugin =  {
 	    _converse: null,
 	    _super:null,
+	    jid:'',
 	    initialize: function () {
 		_converse = this._converse;
 		_converse.api.listen.on('message', obj => {
@@ -21,6 +22,7 @@
 	    send: function(txt){
 		var me = _converse.api.user.jid();
 		me = me.substring(0,me.indexOf('@'));
+		this.jid = me;
 		var fromp = '';
 		var top ='';
 		//var domain = Strophe.getDomainFromJid(Hello.connection.jid);
@@ -38,7 +40,8 @@
 		_converse.api.send(msg);	
 	
 	    },
-	    outmessage: onmessage
+	    outmessage: onmessage,
+	   
 	};
 
     converse.plugins.add('myplugin', mplugin);

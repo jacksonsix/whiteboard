@@ -70,6 +70,7 @@
 	      if(msg.evt =='mousemove' || msg.evt ==='mouseup'){ return;  }
 	  }
 	  msg.type = sta.value;
+	  msg.jid = mplugin.jid;
 	  msger.send(sermsg(msg));
 	  custEvt(sermsg(msg));
       }
@@ -131,7 +132,10 @@
 	  addTextBox(evt.x,evt.y);
       }
       function write(evt){
-
+          var id = evt.id;
+	  if(evt.jid === mplugin.jid){ return; }
+	  var note = document.getElementById(id);
+	  note.value += evt.key;
       }
 
       machine.createnote = createnote;

@@ -1,15 +1,3 @@
-<html>
-  <head>
-<link rel="stylesheet" type="text/css" media="screen" href="https://cdn.conversejs.org/6.0.0/dist/converse.min.css">
-<script src="https://cdn.conversejs.org/6.0.0/dist/converse.min.js" charset="utf-8"></script>
-
-  </head>
-  <body>
-      <textarea id='out'></textarea>
-      <button id='send'>send</button>
-      <textarea id='rec'></textarea>
-	
-      <script>
 	const mplugin =  {
 	    _converse: null,
 	    _super:null,
@@ -17,14 +5,6 @@
 		_converse = this._converse;
 		_converse.api.listen.on('message', obj => {
 		    this.outmessage(obj.stanza.innerHTML); 
-		    //const parser = new DOMParser();
-		    //const dom = parser.parseFromString(obj.stanza.innerHTML, "text/xml");
-		   // var c = dom.getElementsByTagName("body")[0].childNodes[0].nodeValue;
-		    //if(c && c.substring(0,3) ==='$$$'){
-			 
-		    //}
-		   
-		 
 		});
        
 	    },
@@ -70,18 +50,6 @@
     function onmessage(msg){
 	console.log(msg);
 	//var body = $(message).children(‘body’).text();
-	let rec = document.getElementById('rec');
-	rec.innerHTML += msg;
+	//let rec = document.getElementById('rec');
+	//rec.innerHTML += msg;
     }
-  // send out
-  let btn = document.getElementById('send');
-	btn.addEventListener('click',function(evt){
-	let out = document.getElementById('out');
-        mplugin.send(out.value);
-      
-  });
-  // on receive ,display
-  
-</script>
-  </body>
-</html>

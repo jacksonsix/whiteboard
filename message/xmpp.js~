@@ -1,15 +1,3 @@
-<html>
-  <head>
-<link rel="stylesheet" type="text/css" media="screen" href="https://cdn.conversejs.org/6.0.0/dist/converse.min.css">
-<script src="https://cdn.conversejs.org/6.0.0/dist/converse.min.js" charset="utf-8"></script>
-
-  </head>
-  <body>
-      <textarea id='out'></textarea>
-      <button id='send'>send</button>
-      <textarea id='rec'></textarea>
-	
-      <script>
 	const mplugin =  {
 	    _converse: null,
 	    _super:null,
@@ -73,15 +61,3 @@
 	let rec = document.getElementById('rec');
 	rec.innerHTML += msg;
     }
-  // send out
-  let btn = document.getElementById('send');
-	btn.addEventListener('click',function(evt){
-	let out = document.getElementById('out');
-        mplugin.send(out.value);
-      
-  });
-  // on receive ,display
-  
-</script>
-  </body>
-</html>

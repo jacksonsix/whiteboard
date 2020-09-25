@@ -25,13 +25,23 @@
     let mhistory =[];
 
     var msger =  mplugin;
-
+    mplugin.outmessage = msghandler;
     function publishEvt(msg){	
 	mhistory.push(msg);
 	count++;
 	msger.send(sermsg(msg));
-	
+	custEvt(msg);
     }
+
+    function custEvt(msg){
+	const event = new CustomEvent('localevt', { detail: msg });
+	document.dispatchEvent(event);
+    }
+
+    document.addEventListener('localevt',function(evt){
+	var msg = evt.detail;
+	interp(msg);
+    });
   </script>
  
   

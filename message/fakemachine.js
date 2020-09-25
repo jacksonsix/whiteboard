@@ -7,7 +7,8 @@ let users={};
 
 
 function loadinterp(cmd){
-	let c = JSON.parse(cmd);
+        let c = JSON.parse(cmd);
+    
 	interp(c);
 }
 
@@ -15,22 +16,22 @@ function loadinterp(cmd){
 function interp(cmd){
 	let curName = cmd['name'];
 	let curUser = getUserInfo(curName);
-	
+        if(cmd.type !='draw'){return;}
         dup = document.getElementById("canvas");
 	dupcontext = dup.getContext('2d');
-	if(cmd.evttype =='mousedown'){
+	if(cmd.evt =='mousedown'){
 		updateUserInfo(curName,cmd);
               	
-	}else if(cmd.action =='drawline'){
+	}else if(cmd.evt =='mousemove'){
 		let curUser = getUserInfo(curName);
 		let dupx=curUser.x;
 		let dupy=curUser.y;
-		drawLine(dupcontext, dupx, dupy, cmd.parameters[0], cmd.parameters[1]);
+		drawLine(dupcontext, dupx, dupy, cmd.x, cmd.y);
 		let d = {};
-		d.x = cmd.parameters[0];
-		d.y = cmd.parameters[1];
+		d.x = cmd.x;
+		d.y = cmd.y;
 		updateUserInfo(curName,d);
-	}else if(cmd.type =='mouseup'){
+	}else if(cmd.evt =='mouseup'){
               
 	}else{
 	  //

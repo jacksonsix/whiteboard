@@ -77,9 +77,13 @@ function loadpic(){
   msger.send(sermsg(msg));
 }
 function msghandler(evt) {
+    console.log(evt);
     var text = "";
-    var msg = dsermsg(evt.data);
-    msg.type = msg.substring(0,4); 
+    var msg = dsermsg(evt);
+    msg.type = msg.substring(0,4);
+    var info = msg.substring(8).split(',');
+    msg.evt = info[0];
+    msg.detail = info;
     switch(msg.type) {
     case "file":
            //let cid = msg.text.substring(msg.text.indexOf(":") + 1);

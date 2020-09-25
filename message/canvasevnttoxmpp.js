@@ -1,10 +1,72 @@
 
+// get event out
+
+let isDrawing = false;
+let x = 0;
+let y = 0; 
+const myPics = document.getElementById('canvas');
+
+myPics.addEventListener('mousedown', e => {
+  x = e.offsetX;
+  y = e.offsetY;
+    msg = {'type':'draw',
+	   'evt':'mousedown'
+	,'x':x 
+	,'y':y
+  };
+  isDrawing = true;
+  publishEvt(msg);
+});
+
+myPics.addEventListener('mousemove', e => {
+  if (isDrawing === true) {
+    x = e.offsetX;
+    y = e.offsetY;
+      msg = {'type':'draw',
+	     'evt':'mousemove'
+	,'x':x 
+	,'y':y
+	};	
+    publishEvt(msg);	
+  }
+});
+
+window.addEventListener('mouseup', e => {
+    isDrawing = false;
+    x = e.offsetX;
+    y = e.offsetY;
+    msg = {'type':'draw',
+	'evt':'mouseup'
+	,'x':x 
+	,'y':y
+	};	
+    publishEvt(msg);
+});
+
+
+
+///////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
+
+///////////////////////////////////////////////////////////////////////////////////////
+
 function sermsg(msg){
     var text='';
-    return text;
+    for (var name in msg) {
+	if (msg.hasOwnProperty(name)) {
+	    text += msg[name] +',';
+        }
+    }
+    return text.substring(0,text.length-1);
 }
 function dsermsg(xml){
-    var msg={};
+    var start = xml.indexOf('<body>') + 6;
+    var end = xml.indexOf('</body>');
+    var msg = xml.substring(start,end-start);
+    //msg= msg.split(',');
     return msg;
 }
 function loadpic(){
@@ -12,26 +74,24 @@ function loadpic(){
     type: "pict",
     text:"load pic"
   };
-  connection.send(sermsg(msg));
+  msger.send(sermsg(msg));
 }
 function msghandler(evt) {
     var text = "";
     var msg = dsermsg(evt.data);
-     
+    msg.type = msg.substring(0,4); 
     switch(msg.type) {
     case "file":
-        text = "(" + timeStr + ") <b>" + msg.name + "</b>: " + msg.text + "<br>";
-       
-           let cid = msg.text.substring(msg.text.indexOf(":") + 1);
-           let userid = window.sessionStorage.getItem('cid');
-           if(cid === userid){
-             loadpic();
-           }
+           //let cid = msg.text.substring(msg.text.indexOf(":") + 1);
+           //let userid = window.sessionStorage.getItem('cid');
+           //if(cid === userid){
+            // loadpic();
+           //}
         break;
     case "load":
 	loadwork(msg);
 	break;
-    case "comm":
+    case "draw":
 	interp(msg);
         break;
     default:
@@ -44,32 +104,6 @@ function msghandler(evt) {
  
 }
 
-function send() {
-  
-  var msg = {
-    text: document.getElementById("text").value,
-    type: "message",
-    id: clientID,
-    date: Date.now()
-  };
-  connection.send(JSON.stringify(msg));
- 
-}
-
-function sendmouse(evttxt) {
-  console.log("***SEND");
-  var msg = {
-    text: evttxt,
-    type: "message",
-    subtype:"command",
-    id: clientID,
-    name: clientID,
-    date: Date.now()
-  };
-  if(connection){
-	    connection.send(JSON.stringify(msg));
-  }
-}
 
 function load(){
   console.log("***SEND");
@@ -86,49 +120,6 @@ function load(){
 
 function machineCommand(){
 	return true;
-}
-
-function makeCommand(status,evt){
- 	let cmd ={
-	action:'draw',
-	parameters:[23,15]
-	
-	};
-	return cmd;
-}
-
-
-
-function sendCommand(command) {
-  //console.log("***SEND");
-  var msg = command;
-   msg.text = 'blank';
-   msg.type='message';
-   msg.subtype = 'command';
-   msg.id = clientID;
-   msg['name'] = clientID;
-   msg.date = Date.now();
-
-  if(connection){
-    connection.send(JSON.stringify(msg));
-  }
-}
-
-
-// this serve filter.  check status, if intested, then make command.  and then send to back server
-function filterEventType(event) {
-  console.log(event.type)
-  let stat = checkStatus();    // want to make command ?
-  let bmakeCommand = machineCommand(stat);
-  let bchangeStatus = true;
-  if( bmakeCommand){
-	  let command = makeCommand(event);
-          if(event.type==='keydown')
-             sendCommand(command);
-	  //sendmouse(event.type)
-  }else{  // no further process, discard
-    
-  }		  
 }
 
 function loadwork(msg){

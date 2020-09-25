@@ -49,7 +49,4 @@
     });
     function onmessage(msg){
 	console.log(msg);
-	//var body = $(message).children(‘body’).text();
-	//let rec = document.getElementById('rec');
-	//rec.innerHTML += msg;
     }

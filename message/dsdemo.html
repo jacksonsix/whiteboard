@@ -1,7 +1,7 @@
 <!doctype html>
 <html>
 <head>
-  <title>WebSocket Chat Demo</title>
+  <title>Xmpp Demo</title>
   <meta charset="utf-8">
   <link href="shared.css" rel="stylesheet">
   <link rel="stylesheet" type="text/css" media="screen" href="https://cdn.conversejs.org/6.0.0/dist/converse.min.css">
@@ -20,27 +20,15 @@
   <input type="button" name="load" value="load" onclick="load()">load</input>
    <script src="canvasevnttoxmpp.js"> </script>
   <script>
-    let count = 0;
-    let mhistory =[];
-
-    var msger =  mplugin;
-    mplugin.outmessage = msghandler;
-    function publishEvt(msg){	
-	mhistory.push(msg);
-	count++;
-	msger.send(sermsg(msg));
-	custEvt(msg);
-    }
-
-    function custEvt(msg){
-	const event = new CustomEvent('localevt', { detail: msg });
-	document.dispatchEvent(event);
-    }
-
-    document.addEventListener('localevt',function(evt){
-	var msg = evt.detail;
-	interp(msg);
-    });
+    //  mplugin  : xmpp.js
+    // msgprocess : canvaseventtoxmpp.js
+    // machine : fakemachine.js
+    
+    mplugin.outmessage = msgprocess.msghandler;
+    msgprocess.installListener();
+    msgprocess.notep = machine.notep;
+    msgprocess.interp = machine.interp;
+    
   </script>
  
   

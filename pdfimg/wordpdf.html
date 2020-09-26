@@ -4,7 +4,7 @@
       .user {
 	  width: 150px;
 	  height: 100px;
-	  border: 1px solid blue;
+	  /*border: 1px solid blue;*/
 	  position: absolute;
 	  opacity:0.7
       }
@@ -57,35 +57,7 @@
     <script src="./../message/xmpp.js"></script>
     <script src="./../message/canvasevnttoxmpp.js"></script>
     <script src="./../message/fakemachine.js"></script>
-    <script>
-      var msger =  mplugin;
-      mplugin.outmessage = msghandler;
-      function publishEvt(msg){	
-	 // mhistory.push(msg);
-	  // count++;
-	  let sta = document.getElementById('status');
-	  if(sta.value ==='default'){
-	      return;
-	  }else if(sta.value ==='note'){
-	      if(msg.evt =='mousemove' || msg.evt ==='mouseup'){ return;  }
-	  }
-	  msg.type = sta.value;
-	  msg.jid = mplugin.jid;
-	  msger.send(sermsg(msg));
-	  custEvt(sermsg(msg));
-      }
-
-      function custEvt(msg){
-	  const event = new CustomEvent('localevt', { detail: msg });
-	  document.dispatchEvent(event);
-      }
-
-      document.addEventListener('localevt',function(evt){
-	  var msg = evt.detail;
-	  var fake ='<body>$$$' + msg +'</body>';
-	  msghandler(fake);
-      });
-    </script>
+    <script src="pdfnote.js"></script>
     <script>
 
       var url = './a.pdf';
@@ -128,74 +100,19 @@
     </script>	
 
     <script>
-      function createnote(evt,canvaname){
-	  addTextBox(evt.x,evt.y);
-      }
-      function write(evt){
-          var id = evt.id;
-	  if(evt.jid === mplugin.jid){ return; }
-	  var note = document.getElementById(id);
-	  note.value += evt.key;
-      }
 
-      machine.createnote = createnote;
-      machine.write = write;
-
-      function addTextBox(left,top){
-
-	  let t = document.createElement("div");
-	  t.id = 'c'+ left + '' + top;
-	  t.style['left'] = left;
-	  t.style['top'] = top;
-	  t.classList.add('user');
-
-	  let can = document.createElement("textarea");
-	  can.id = 't' + t.id;
-	  can.addEventListener('keydown',function(evt){
-	      msg = {
-		  'evt':'keydown'
-		  ,'key':evt.key 
-		  ,'keyCode':evt.keyCode
-		  ,'id':can.id
-	      };
-	      
-	      publishEvt(msg);
-	  });
-	  let point = document.createElement("div");
-	  point.classList.add('leftcorner');
-	  t.appendChild(point);
-	  t.appendChild(can);
-	  let plate = document.getElementById("plate");
-	  plate.appendChild(t);
-	  $( "#"+t.id ).draggable();
-      }
+      //  mplugin  : xmpp.js
+      // msgprocess : canvaseventtoxmpp.js
+      // machine : fakemachine.js
+      // pdfnote : pdfnote.js
       
-     
-      //document.addEventListener('click',processEvt);
-      
-      function getBox(evt){
-          let boxes = document.getElementsByClassName('user');
-          for(var i=0;i<boxes.length;i++){
-	      let box = boxes[i];
-	      let rect = box.getBoundingClientRect();
-	      if(evt.clientX > rect.left
-                 && evt.clientX <rect.left + rect.width
-		 && evt.clientY > rect.top
-	         && evt.clientY < rect.top + rect.height){
-		  return box;}
-	  }
-	  return null;
-      }
-      function processEvt(evt){
-	  let sta = document.getElementById('status');
-	  if(sta.value !== 'note'){ return;}
-	  let cur = getBox(evt) ;
-	  if(cur == null){	      
-	      let left = evt.clientX;
-	      let top  = evt.clientY;
-	      addTextBox(left,top);
-	  }	  
-      }
+      mplugin.outmessage = msgprocess.msghandler;
+      msgprocess.installListener();
+      msgprocess.notep = machine.notep;
+      msgprocess.interp = machine.interp;    
+      machine.createnote = pdfnote.createnote;
+      machine.write = pdfnote.write;
+
     </script>
   </body>
 </html>

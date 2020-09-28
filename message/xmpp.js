@@ -27,12 +27,12 @@
 		var top ='';
 		//var domain = Strophe.getDomainFromJid(Hello.connection.jid);
 
-		if(me ==='tom'){
-		    fromp ='tom@whiteboard-k42jz';
-		    top = 'jianlong@whiteboard-k42jz';
+		if(me ==='demi'){
+		    fromp ='demi@readbook.eastus.cloudapp.azure.com';
+		    top = 'jianlong@readbook.eastus.cloudapp.azure.com';
 		}else{
-		    top ='tom@whiteboard-k42jz';
-		    fromp = 'jianlong@whiteboard-k42jz';
+		    top ='demi@readbook.eastus.cloudapp.azure.com';
+		    fromp = 'jianlong@readbook.eastus.cloudapp.azure.com';
 		}
 		var msg = converse.env.$msg({from: fromp, to: top, type: 'chat'})
 		    .c('body')
@@ -46,7 +46,7 @@
 
     converse.plugins.add('myplugin', mplugin);
     converse.initialize({
-        bosh_service_url: 'http://192.168.0.134:5280/bosh', // Please use this connection manager only for testing purposes
+        bosh_service_url: 'http://readbook.eastus.cloudapp.azure.com:5280/bosh', // Please use this connection manager only for testing purposes
         show_controlbox_by_default: true,
 	whitelisted_plugins: ['myplugin']
     });

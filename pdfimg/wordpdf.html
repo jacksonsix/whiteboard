@@ -80,11 +80,11 @@
     <script src="pdfloader.js"></script>
     <script src="./../dataAndState/msglog.js"></script>
     <script>
-      uploader.baseUrl = 'http://localhost:9081/';
+      uploader.baseUrl = 'http://readbook.eastus.cloudapp.azure.com:9081/';
       uploader.runOnce();
     
       //pdfloader
-      pdfloader.baseurl = 'http://localhost:9081/getbook/';
+      pdfloader.baseurl = 'http://readbook.eastus.cloudapp.azure.com:9081/getbook/';
       pdfloader.workerSrc = './build/pdf.worker.js';
       pdfloader.runOnce();
       //pdfloader.getFile(file);

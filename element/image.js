@@ -14,64 +14,104 @@
 }
 
 
-const fileSelect = document.getElementById("fileSelect"),
-    fileElem = document.getElementById("fileElem"),
-    fileList = document.getElementById("fileList");
 
-fileSelect.addEventListener("click", function (e) {
-  if (fileElem) {
-    fileElem.click();
-  }
-  e.preventDefault(); // prevent navigation to "#"
-}, false);
 
-fileElem.addEventListener("change", handleFiles, false); 
+function runOnce(){
+    const fileSelect = document.getElementById("fileSelect"),
+	  fileList = document.getElementById("fileList"),
+	  fileElem = document.getElementById("fileElem");	  
+
+    fileSelect.addEventListener("click", function (e) {
+	if (fileElem) {
+	    fileElem.click();
+	}
+	e.preventDefault(); // prevent navigation to "#"
+    }, false);
+
+    // list all files
+    fileList.addEventListener("click", function (e) {
+	refresh();
+	e.preventDefault(); // prevent navigation to "#"
+    }, false);
+
+
+    // upload file
+    fileElem.addEventListener("change", handleFiles, false);
+
+    // select a  file to read
+    var plist = document.getElementById('plist');
+    plist.addEventListener('click',evt =>{
+	var file = evt.target.innerHTML;
+	var msg ={
+	    type: 'file',
+	    evt: 'read',
+	    file: file
+	};
+
+	msgprocess.publishEvt(msg);
+    });
+
+    // change page
+    var page = document.getElementById('page');
+    page.addEventListener('change',function(evt){
+	var p = page.value;
+	var pn =0;
+	const parsed = parseInt(p);
+        if (isNaN(parsed)) {
+	    pn= 0;
+	}else{
+	    pn = parsed;
+	}
+	
+	var msg ={
+	    type:'file',
+	    evt: 'page',
+	    num: pn
+	};
+	msgprocess.publishEvt(msg);
+    });
+    
+}
+
+function refresh(){
+   
+    var msg ={
+	type: 'file',
+	evt: 'list'
+    };
+    msgprocess.publishEvt(msg);
+
+}
+
 
 function handleFiles() {
-  if (!this.files.length) {
-    fileList.innerHTML = "<p>No files selected!</p>";
-  } else {
-    fileList.innerHTML = "";
-    const list = document.getElementById("container");
-    fileList.appendChild(list);
-    for (let i = 0; i < this.files.length; i++) {
-      const li = document.createElement("li");
-      list.appendChild(li);
-      
-      const img = document.createElement("img");
-      img.src = URL.createObjectURL(this.files[i]);
-      img.classList.add("obj");
-      img.id = 'img'+ i;
-      img.height = 60;
-      img.onload = function() {
-        URL.revokeObjectURL(this.src);
-      }
-      li.appendChild(img);
-      //const info = document.createElement("span");
-      //info.innerHTML = this.files[i].name + ": " + this.files[i].size + " bytes";
-      //li.appendChild(info);
-      //send to file server
-      sendFile(this.files[i]);
+    
+    for (let i = 0; i < this.files.length; i++) {	
+	//send to file server
+	sendFile(this.files[i]);
     }
-  }
+    
 }
 
 
 function sendFile(file) {
-    const cid = window.sessionStorage.getItem('cid');
-    console.log("cid is " + cid);
-    const uri = "http://localhost:9081/fileupload/" + cid;
+    const uri = uploader.baseUrl + "fileupload/";
     const xhr = new XMLHttpRequest();
     const fd = new FormData();
     
     xhr.open("POST", uri, true);
     xhr.onreadystatechange = function() {
         if (xhr.readyState == 4 && xhr.status == 200) {
-            //alert(xhr.responseText); // handle response.
 	    console.log('upload success');
+	    refresh();
         }
     };
     fd.append('myFile', file);
     // Initiate a multipart/form-data upload
     xhr.send(fd);
 }
+
+var uploader ={
+    runOnce: runOnce,
+    baseUrl:''
+};

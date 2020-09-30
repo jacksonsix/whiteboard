@@ -32,7 +32,15 @@
 	  -moz-box-sizing: border-box;    /* Firefox, other Gecko */
 	  box-sizing: border-box;         /* Opera/IE 8+ */
       }
-      
+      #navigation
+      {
+	  position: absolute; /*or fixed*/
+	  right: 80px;
+      }
+
+      li {
+  text-decoration: underline blue;
+}
     </style>
 
     <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
@@ -49,57 +57,37 @@
 	<option selected="selected">default</option>
       </select>
     </div>
+
+    <div id="navigation">
+      <input type="file" id="fileElem" multiple accept="pdf/*" style="display:none">
+      <a href="#" id="fileSelect">upload files</a>
+      <a href="#" id="fileList">list files</a>
+      <input id="page" type="text" value="1"></input>
+      <ul id="plist" ></ul>
+    </div> 
+    
     <div>
-      <canvas id="canvas" style="border: 1px solid black; direction: ltr;"></canvas>
+      <canvas id="canvas" style=" direction: ltr;"></canvas>
     </div>
+    
     <script src="https://cdn.conversejs.org/6.0.0/dist/converse.min.js" charset="utf-8"></script>
     <script src="./build/pdf.js"></script>
     <script src="./../message/xmpp.js"></script>
     <script src="./../message/canvasevnttoxmpp.js"></script>
     <script src="./../message/fakemachine.js"></script>
+     <script src="./../element/image.js"></script>
     <script src="pdfnote.js"></script>
+    <script src="pdfloader.js"></script>
+    <script src="./../dataAndState/msglog.js"></script>
     <script>
-
-      var url = './a.pdf';
-
-      //
-      // The workerSrc property shall be specified.
-      //
-      pdfjsLib.GlobalWorkerOptions.workerSrc ='./build/pdf.worker.js';
-
-      //
-      // Asynchronous download PDF
-      //
-      var loadingTask = pdfjsLib.getDocument(url);
-      loadingTask.promise.then(function(pdf) {
-	  //
-	  // Fetch the first page
-	  //
-	  pdf.getPage(2).then(function(page) {
-	      var scale = 1.5;
-	      var viewport = page.getViewport({ scale: scale, });
-
-	      //
-	      // Prepare canvas using PDF page dimensions
-	      //
-	      var canvas = document.getElementById('canvas');
-	      var context = canvas.getContext('2d');
-	      canvas.height = viewport.height;
-	      canvas.width = viewport.width;
-
-	      //
-	      // Render PDF page into canvas context
-	      //
-	      var renderContext = {
-		  canvasContext: context,
-		  viewport: viewport,
-	      };
-	      page.render(renderContext);
-	  });
-      });
-    </script>	
-
-    <script>
+      uploader.baseUrl = 'http://localhost:9081/';
+      uploader.runOnce();
+    
+      //pdfloader
+      pdfloader.baseurl = 'http://localhost:9081/getbook/';
+      pdfloader.workerSrc = './build/pdf.worker.js';
+      pdfloader.runOnce();
+      //pdfloader.getFile(file);
 
       //  mplugin  : xmpp.js
       // msgprocess : canvaseventtoxmpp.js
@@ -112,7 +100,7 @@
       msgprocess.interp = machine.interp;    
       machine.createnote = pdfnote.createnote;
       machine.write = pdfnote.write;
-
+      machine.writehistory = pdfnote.writehistory;
     </script>
   </body>
 </html>

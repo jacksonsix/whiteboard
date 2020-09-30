@@ -46,7 +46,7 @@
 
     converse.plugins.add('myplugin', mplugin);
     converse.initialize({
-        bosh_service_url: 'http://readbook.eastus.cloudapp.azure.com:5280/bosh', // Please use this connection manager only for testing purposes
+        bosh_service_url: 'http://readbook.eastus.cloudapp.azure.com:5443/bosh', // Please use this connection manager only for testing purposes
         show_controlbox_by_default: true,
 	whitelisted_plugins: ['myplugin']
     });

@@ -8,6 +8,11 @@ function write(evt){
     note.value = evt.text;
 }
 
+function writehistory(evt){
+    var id = evt.id;
+    var note = document.getElementById(id);
+    note.value = evt.text;
+}
 
 
 function addTextBox(left,top){
@@ -67,5 +72,6 @@ function processEvt(evt){
 
 var pdfnote={
     createnote:createnote,
-    write:write
+    write:write,
+    writehistory:writehistory
 }

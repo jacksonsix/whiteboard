@@ -1,0 +1,39 @@
+  function viewpage(pdfobject,pagenumber){
+	    pdfobject.getPage(pagenumber).then(function(page) {
+	      var scale = 1.5;
+	      var viewport = page.getViewport({ scale: scale, });
+
+	      //
+	      // Prepare canvas using PDF page dimensions
+	      //
+	      var canvas = document.getElementById('canvas');
+	      var context = canvas.getContext('2d');
+	      canvas.height = viewport.height;
+	      canvas.width = viewport.width;
+
+	      //
+	      // Render PDF page into canvas context
+	      //
+	      var renderContext = {
+		  canvasContext: context,
+		  viewport: viewport,
+	      };
+	      page.render(renderContext);
+	  });
+      }
+      function getFile(url){
+	  var loadingTask = pdfjsLib.getDocument(url);
+	  loadingTask.promise.then(function(pdf) {
+	      //
+	      // Fetch the first page
+	      //
+	      pdfobject = pdf;
+	      viewpage(pdf,1);
+	  });
+      }
+
+var pdfloader ={
+    getFile:getFile,
+    viewpage:viewpage
+    
+};

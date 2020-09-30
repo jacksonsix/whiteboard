@@ -1,0 +1,22 @@
+<html>
+  <head>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
+  </head>
+  <body>
+    <div>
+      <input type="file" id="fileElem" multiple accept="pdf/*" style="display:none">
+      <a href="#" id="fileSelect">upload files</a>
+      <a href="#" id="fileList">list files</a> 
+      <ul id="plist" ></ul>
+    </div>
+    <script src="image.js"></script>
+    <script>
+      
+      uploader.baseUrl = 'http://localhost:9081/';
+      uploader.runOnce();
+      
+
+    </script>
+  </body>
+
+</html>

@@ -1,0 +1,125 @@
+<html>
+  <head>
+  
+    <script src="goal.js"></script>
+
+    <script src="element.js"></script>
+    <style>
+	canvas {
+	    height: 100px;
+	    width: 100px;
+	    border: 1px solid blue;
+	} 
+
+	img {
+	  width: 270px;
+	  border: 1px solid black;
+	}
+
+    </style>
+  </head>
+  <body>
+
+<input type="file" id="fileElem" multiple accept="image/*" style="display:none">
+<a href="#" id="fileSelect">Select some pictures</a> 
+<div id="fileList">
+  <p>No pictures selected!</p>
+
+</div>
+  <ul id="container"></ul>
+ <div>
+        <div id="dropzone" style="margin:30px; width:150px; height:130px; border:1px dotted grey;">Drag & drop your file</div>
+    </div>
+<span>note</span>
+    
+   <div>
+      <input type='file' name='img' size='165' id='uploadimage' />
+    </div>
+
+    <div id="btn">
+      <input id="btn1" type="text" id="txtState"></input>
+      <span>test word</span>
+    </div>
+    <div id="holder"> 
+    </div>
+    <script src="image.js"></script>
+    <script>
+      //upload picture and draw
+      window.sessionStorage.setItem('cid','jason');
+
+      //let dbconnect =  initdb()();
+      document.getElementById("uploadimage").addEventListener("change", function() {
+      
+	      let can =  createElement("holder","canvas");
+	    
+	      draw(can.id);
+      
+      }, false)
+
+    </script>
+   
+    <script>
+      
+      let status = 'default';
+      let cursorStyle ='default';
+      let canavsId =['holder'][0];
+      //let canavsId ='img0';
+
+      // mouse over and change target
+      //let container = document.getElementById("container");
+	document.addEventListener("mouseover", function( event ) {   
+	  // highlight the mouseover target
+          if(event.target === document){
+             //event.preventDefault();
+             //event.stopPropagation();
+             return;
+          }
+	  event.target.style.color = "orange";
+          //console.log(event.target.innerHTML);
+          //var tm = document.createElement('div');
+          //tm.innerHTML = event.target.innerHTML;
+          let focus =[];
+          document.querySelectorAll('.obj').forEach(e => { focus.push(e.id)});
+          console.log(focus);
+          event.target.innerHTML.split(' ').forEach(seg => {
+                                                   
+                                                    if(seg.indexOf('id=')==0 && status ==='default'){
+                                                      let tId = seg.substring(4,seg.length - 1); 
+                                                      if(focus.indexOf(tId) >=0){canavsId=tId} 
+                                                      
+                                                   }});
+          
+	  // reset the color after a short delay
+	  setTimeout(function() {
+	    event.target.style.color = "";
+	  }, 500);
+	}, false);
+
+    
+    </script>
+
+    <script>
+
+
+ 	window.onload = function() {
+            const dropzone = document.getElementById("dropzone");
+            dropzone.ondragover = dropzone.ondragenter = function(event) {
+                event.stopPropagation();
+                event.preventDefault();
+            }
+    
+            dropzone.ondrop = function(event) {
+                event.stopPropagation();
+                event.preventDefault();
+
+                const filesArray = event.dataTransfer.files;
+                for (let i=0; i<filesArray.length; i++) {
+                    sendFile(filesArray[i]);
+                }
+            }
+        }
+    </script>
+
+  </body>
+
+</html>

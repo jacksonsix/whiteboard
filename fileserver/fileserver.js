@@ -13,7 +13,7 @@ const server = http.createServer((req, res) => {
 	const form = formidable({ multiples: true });
 	var begin = req.url.lastIndexOf('/') + 1;
 	var sender = req.url.substring(begin);
-	console.log('sender is ' + sender);
+
 	form.uploadDir = path.join(__dirname, '/uploads');
 	form.parse(req, (err, fields, files) => { 
             var oldpath = files.myFile.path ;
@@ -66,8 +66,9 @@ const server = http.createServer((req, res) => {
     }else if(req.url.indexOf('/getbook') >=0 && req.method.toLowerCase() ==='get' ){
 	// other wise serve a file to client
 	console.log(req.url)
-	var star =  req.url.lastIndexOf('/') + 1;
-	var book = req.url.substring(star);
+	var decode = decodeURI(req.url);
+	var star =  decode.lastIndexOf('/') + 1;
+	var book = decode.substring(star);
 	let upfolder = path.join(__dirname, '/uploads');
 	try{ 
 	    res.writeHead(200, { 'Content-disposition': 'attachment', 

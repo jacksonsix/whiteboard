@@ -77,6 +77,8 @@ function filep(cmd){
 	pdfloader.getFile(cmd.file);
 	machine.book = cmd.file;
 	clearlist();
+	var ptext = document.getElementById('page');
+	ptext.value = 1;
     } 
 }
 

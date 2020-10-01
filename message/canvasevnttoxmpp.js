@@ -65,13 +65,15 @@ function publishEvt(msg){
 	if(msg.evt =='mousemove' || msg.evt ==='mouseup') {return; }
     }else if(sta.value ==='note'){
 	if(msg.evt =='mousemove' || msg.evt ==='mouseup'){ return;  }
-	msg.type = sta.value;
-    }
-    
+	if(msg.type){
+	}else{
+	    msg.type = sta.value;
+	}
+    }    
     msg.jid = mplugin.jid;
     mplugin.send(sermsg(msg));
     custEvt(sermsg(msg));
-   
+    
 }
 
 function custEvt(msg){

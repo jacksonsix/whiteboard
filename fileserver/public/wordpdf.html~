@@ -1,0 +1,109 @@
+<html>
+  <head>
+    <style>
+      .user {
+	  width: 150px;
+	  height: 100px;
+	  /*border: 1px solid blue;*/
+	  position: absolute;
+	  opacity:0.7
+      }
+      .leftcorner{
+	  height: 10%;
+	  width: 100%;
+	  background-color: yellow;
+	  -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
+	  -moz-box-sizing: border-box;    /* Firefox, other Gecko */
+	  box-sizing: border-box;         /* Opera/IE 8+ */          
+      }
+
+      .tool {
+	  position: absolute;
+	  top: 0;
+          left: 0;
+          p {
+	      width: 50 px;
+          }
+      }
+      textarea{
+	  height: 90%;
+	  width: 100%;
+	  -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
+	  -moz-box-sizing: border-box;    /* Firefox, other Gecko */
+	  box-sizing: border-box;         /* Opera/IE 8+ */
+      }
+      #navigation
+      {
+	  position: absolute; /*or fixed*/
+	  right: 80px;
+      }
+
+      li {
+  text-decoration: underline blue;
+}
+    </style>
+
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <link rel="stylesheet" type="text/css" media="screen" href="https://cdn.conversejs.org/6.0.0/dist/converse.min.css">
+
+  </head>
+  <body>
+    <div id="plate" class="tool">
+      <select id="status">
+	<option>note</option>
+	<option>highlight</option>
+	<option>draw</option>
+	<option selected="selected">default</option>
+      </select>
+    </div>
+
+    <div id="navigation">
+      <input type="file" id="fileElem" multiple accept="pdf/*" style="display:none">
+      <a href="#" id="fileSelect">upload files</a>
+      <a href="#" id="fileList">list files</a>
+      <input id="page" type="text" value="1"></input>
+      <ul id="plist" ></ul>
+    </div> 
+    
+    <div>
+      <canvas id="canvas" style=" direction: ltr;"></canvas>
+    </div>
+    
+    <script src="https://cdn.conversejs.org/6.0.0/dist/converse.min.js" charset="utf-8"></script>
+    <script src="pdf.js"></script>
+    <script src="xmpp.js"></script>
+    <script src="canvasevnttoxmpp.js"></script>
+    <script src="fakemachine.js"></script>
+     <script src="image.js"></script>
+    <script src="pdfnote.js"></script>
+    <script src="pdfloader.js"></script>
+    <script src="msglog.js"></script>
+    <script>
+      //uploader.baseUrl = 'http://readbook.eastus.cloudapp.azure.com:9081/';
+      uploader.baseUrl = 'http://localhost:8080/users/';
+      uploader.runOnce();
+    
+      //pdfloader  pdfloader.js
+      pdfloader.baseurl = 'http://localhost:8080/users/getbook/';
+      pdfloader.workerSrc = 'pdf.worker.js';
+      pdfloader.runOnce();
+
+      //  mplugin  : xmpp.js
+      // msgprocess : canvaseventtoxmpp.js
+      // machine : fakemachine.js
+      // pdfnote : pdfnote.js
+      // logger : msglog.js
+      
+      mplugin.outmessage = msgprocess.msghandler;
+      msgprocess.installListener();
+      msgprocess.notep = machine.notep;
+      msgprocess.interp = machine.interp;
+      msgprocess.filep = machine.filep;
+      msgprocess.pagep = machine.pagep;
+      machine.createnote = pdfnote.createnote;
+      machine.write = pdfnote.write;
+      machine.writehistory = pdfnote.writehistory;
+    </script>
+  </body>
+</html>

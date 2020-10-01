@@ -1,0 +1,30 @@
+<html>
+  <head>
+<link rel="stylesheet" type="text/css" media="screen" href="https://cdn.conversejs.org/6.0.0/dist/converse.min.css">
+
+  </head>
+  <body>
+    <script src="https://cdn.conversejs.org/6.0.0/dist/converse.min.js" charset="utf-8"></script>
+    <script src="xmpp.js"></script>
+      <textarea id='out'></textarea>
+      <button id='send'>send</button>
+      <textarea id='rec'></textarea>
+	
+      <script>
+	
+	mplugin.outmessage= handler;
+	function handler(msg){
+	    console.log('new '+ msg);
+	}
+  // send out
+  let btn = document.getElementById('send');
+	btn.addEventListener('click',function(evt){
+	let out = document.getElementById('out');
+        mplugin.send(out.value);
+      
+  });
+  // on receive ,display
+  
+</script>
+  </body>
+</html>

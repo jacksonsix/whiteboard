@@ -62,8 +62,9 @@ function pagep(cmd){
 
 function filep(cmd){
     if(cmd.evt ==='list'){
-	$.get( uploader.baseUrl + "list/test", function( data ) {	
-	    var books = JSON.parse(data);
+	$.get( uploader.baseUrl + "list", function( data ) {	
+	    //var books = JSON.parse(data);
+	    var books = data;
 	    var plist = document.getElementById('plist');
 	    clearlist();
 	    books.forEach(book => {

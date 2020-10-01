@@ -71,20 +71,21 @@
     </div>
     
     <script src="https://cdn.conversejs.org/6.0.0/dist/converse.min.js" charset="utf-8"></script>
-    <script src="./build/pdf.js"></script>
-    <script src="./../message/xmpp.js"></script>
-    <script src="./../message/canvasevnttoxmpp.js"></script>
-    <script src="./../message/fakemachine.js"></script>
+    <script src="./../../imgpdf/build/pdf.js"></script>
+    <script src="./../../message/xmpp.js"></script>
+    <script src="./../../message/canvasevnttoxmpp.js"></script>
+    <script src="./../../message/fakemachine.js"></script>
      <script src="./../element/image.js"></script>
-    <script src="pdfnote.js"></script>
-    <script src="pdfloader.js"></script>
+    <script src="./../../pdfnote.js"></script>
+    <script src="./../../pdfloader.js"></script>
     <script src="./../dataAndState/msglog.js"></script>
     <script>
-      uploader.baseUrl = 'http://readbook.eastus.cloudapp.azure.com:9081/';
+      //uploader.baseUrl = 'http://readbook.eastus.cloudapp.azure.com:9081/';
+      uploader.baseUrl = 'http://localhost:8080/users/';
       uploader.runOnce();
     
       //pdfloader  pdfloader.js
-      pdfloader.baseurl = 'http://readbook.eastus.cloudapp.azure.com:9081/getbook/';
+      pdfloader.baseurl = 'http://localhost:8080/users/getbook/';
       pdfloader.workerSrc = './build/pdf.worker.js';
       pdfloader.runOnce();
 

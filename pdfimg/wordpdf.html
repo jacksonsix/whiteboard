@@ -83,21 +83,23 @@
       uploader.baseUrl = 'http://readbook.eastus.cloudapp.azure.com:9081/';
       uploader.runOnce();
     
-      //pdfloader
+      //pdfloader  pdfloader.js
       pdfloader.baseurl = 'http://readbook.eastus.cloudapp.azure.com:9081/getbook/';
       pdfloader.workerSrc = './build/pdf.worker.js';
       pdfloader.runOnce();
-      //pdfloader.getFile(file);
 
       //  mplugin  : xmpp.js
       // msgprocess : canvaseventtoxmpp.js
       // machine : fakemachine.js
       // pdfnote : pdfnote.js
+      // logger : msglog.js
       
       mplugin.outmessage = msgprocess.msghandler;
       msgprocess.installListener();
       msgprocess.notep = machine.notep;
-      msgprocess.interp = machine.interp;    
+      msgprocess.interp = machine.interp;
+      msgprocess.filep = machine.filep;
+      msgprocess.pagep = machine.pagep;
       machine.createnote = pdfnote.createnote;
       machine.write = pdfnote.write;
       machine.writehistory = pdfnote.writehistory;

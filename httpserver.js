@@ -55,7 +55,7 @@ const requestListener = function (req, res) {
 	res.write(data);  
 	res.end();
        });  
-  }else {
+  }else if(req.url.indexOf('.html') >0 ) {
 	res.writeHead(200, {'Content-Type': 'text/html',
            'Set-Cookie':["SameSite=None"]
          });
@@ -73,6 +73,9 @@ const requestListener = function (req, res) {
 	
 	 });
 	
+  }else{
+      res.writeHead(404, {'Content-Type': 'text/html'});
+      res.end();
   }
 
   

@@ -69,18 +69,16 @@ const server = http.createServer((req, res) => {
 	var star =  req.url.lastIndexOf('/') + 1;
 	var book = req.url.substring(star);
 	let upfolder = path.join(__dirname, '/uploads');
-	try{
-	    
-	    var files = fs.createReadStream(upfolder +'/'+ book);
-	    files.pipe(res); // also you can set content-type
+	try{ 
 	    res.writeHead(200, { 'Content-disposition': 'attachment', 
 				 'Access-Control-Allow-Origin': '*'
 			       });
+	    var files = fs.createReadStream(upfolder +'/'+ book);
+	    files.pipe(res); // also you can set content-type
 	}catch(er){
 	    console.log(er);
 
 	}
-
 
     }
 

@@ -119,6 +119,8 @@ var msgprocess ={
 	case "file":      
             filep(msg);         
             break;
+	case "page":
+	    pagep(msg);
 	case "many":
 	    manyp(msg);
 	    break;

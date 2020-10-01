@@ -64,7 +64,7 @@ function runOnce(){
 	}
 	
 	var msg ={
-	    type:'file',
+	    type:'page',
 	    evt: 'page',
 	    num: pn
 	};

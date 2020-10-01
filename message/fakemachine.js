@@ -11,6 +11,7 @@ machine.write = null;
 machine.notep = notep;
 machine.interp = interp;
 machine.filep = filep;
+machine.pagep = pagep;
 machine.book ='';
 machine.pagenum = 1;
 
@@ -33,34 +34,20 @@ function manyp(cmd){
     
 }
 
-function filep(cmd){
-    if(cmd.evt ==='list'){
-	$.get( uploader.baseUrl + "list/test", function( data ) {	
-	    var books = JSON.parse(data);
-	    var plist = document.getElementById('plist');
-	    var cs =[];
-	    for (let i = 0; i < plist.children.length; i++) {
-		cs.push(plist.children[i]);
-	    }
-	    cs.forEach(c => {c.parentNode.removeChild(c);});
-	    books.forEach(book => {
-		var b =document.createElement('li');
-		b.innerHTML = book;	 
-		plist.appendChild(b);
-	    });
-	});
-	
-    }else if(cmd.evt ==='page'){	  	
+function pagep(cmd){
+    if(cmd.evt ==='page'){	  	
 	pdfloader.viewpage(cmd.num);
 	// clear current page note
-	// load all notes on this page
 	var cs =[];
 	var notes = document.getElementsByClassName('user');
 	for(var i=0;i< notes.length;i++){
 	    cs.push(notes[i]);	    
 	}
         cs.forEach(n =>{ n.parentNode.removeChild(n); });
-	//
+	// update page text
+	var ptext = document.getElementById('page');
+	ptext.value = cmd.num;
+	// load all notes on this page
 	machine.pagenum = cmd.num;
 	var msg ={
 	    type: 'note',
@@ -70,10 +57,36 @@ function filep(cmd){
 	};
 	publishEvt(msg);
 
+    }
+}
+
+function filep(cmd){
+    if(cmd.evt ==='list'){
+	$.get( uploader.baseUrl + "list/test", function( data ) {	
+	    var books = JSON.parse(data);
+	    var plist = document.getElementById('plist');
+	    clearlist();
+	    books.forEach(book => {
+		var b =document.createElement('li');
+		b.innerHTML = book;	 
+		plist.appendChild(b);
+	    });
+	});
+	
     }else if(cmd.evt ==='read'){
 	pdfloader.getFile(cmd.file);
 	machine.book = cmd.file;
+	clearlist();
     } 
+}
+
+function clearlist(){
+    var plist = document.getElementById('plist');
+    var cs =[];
+    for (let i = 0; i < plist.children.length; i++) {
+	cs.push(plist.children[i]);
+    }
+    cs.forEach(c => {c.parentNode.removeChild(c);});
 }
 
 function notep(cmd,canvname){

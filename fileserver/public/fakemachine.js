@@ -18,6 +18,7 @@ machine.pagenum = 1;
 function manyp(cmd){
     
     var records = cmd.records;
+    if(typeof(cmd.records) ==='undefined'){return; }
     var rs = records.split('\n');
     rs.forEach(r =>{
 	if(r.length < 5) return;

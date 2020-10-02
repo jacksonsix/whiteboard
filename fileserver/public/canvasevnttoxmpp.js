@@ -123,6 +123,7 @@ var msgprocess ={
             break;
 	case "page":
 	    pagep(msg);
+	    break;
 	case "many":
 	    manyp(msg);
 	    break;

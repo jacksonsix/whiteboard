@@ -26,6 +26,7 @@
           }
       }
       textarea{
+  	  font-size: 18px; 
 	  height: 90%;
 	  width: 100%;
 	  -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
@@ -80,13 +81,13 @@
     <script src="pdfloader.js"></script>
     <script src="msglog.js"></script>
     <script>
-      uploader.baseUrl = 'http://readbook.eastus.cloudapp.azure.com:8080/users/';
-      //uploader.baseUrl = 'http://localhost:8080/users/';
+     // uploader.baseUrl = 'http://readbook.eastus.cloudapp.azure.com:8080/users/';
+      uploader.baseUrl = 'http://localhost:8080/users/';
       uploader.runOnce();
     
       //pdfloader  pdfloader.js
-      pdfloader.baseurl = 'http://readbook.eastus.cloudapp.azure.com:8080/users/getbook/';
-      //pdfloader.baseurl = 'http://localhost:8080/users/getbook/';
+     // pdfloader.baseurl = 'http://readbook.eastus.cloudapp.azure.com:8080/users/getbook/';
+      pdfloader.baseurl = 'http://localhost:8080/users/getbook/';
       pdfloader.workerSrc = 'pdf.worker.js';
       pdfloader.runOnce();
 

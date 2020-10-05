@@ -30,7 +30,7 @@ function installListener(){
 	    ,'y':e.offsetY
 	};
 	let status = sta.value;
-	if(status ==='highlight'){
+	if(status ==='highlight' && stateObject.drawing){
 	    msg.type = 'mark';
 	    publishEvt(msg);
 	}else{

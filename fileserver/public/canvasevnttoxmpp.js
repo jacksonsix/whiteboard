@@ -100,6 +100,8 @@ function publishEvt(msg){
 		}else{
 		msgprocess.mhistory.push(sermsg(msg));
 		} */
+	msg.no = msgprocess.no++;
+	
 	msgprocess.mhistory.push(sermsg(msg));
 	//mplugin.send(sermsg(msg));
 	custEvt(sermsg(msg));
@@ -112,6 +114,7 @@ function publishEvt(msg){
 
 
 	mplugin.send(sermsg(mmsg));
+	msgprocess.no = 0;
 	mplugin.send(sermsg(msg));
 	custEvt(sermsg(msg));
     }
@@ -204,6 +207,7 @@ var msgprocess ={
     publishEvt:publishEvt,
     custEvt:custEvt,
     clearMsgQueue:clearMsgQueue,
-    mhistory:[]
+    mhistory:[],
+    no:0
 }
 

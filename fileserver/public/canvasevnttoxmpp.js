@@ -115,6 +115,7 @@ function publishEvt(msg){
 
 	mplugin.send(sermsg(mmsg));
 	msgprocess.no = 0;
+	msgprocess.mhistory =[];
 	mplugin.send(sermsg(msg));
 	custEvt(sermsg(msg));
     }

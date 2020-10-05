@@ -16,9 +16,15 @@ machine.pagenum = 1;
 
 function manyp(cmd){
     
-    var records = cmd.records;
-    if(typeof(cmd.records) ==='undefined'){return; }
-    var rs = records.split('\n');
+    var rs = [];
+    if(typeof(cmd.records) ==='undefined'){
+	return;
+    }else if(typeof(cmd.records) =='string'){
+	rs = cmd.records.split('\n');
+    }else{
+	rs = cmd.records;
+    }
+    
     rs.forEach(r =>{
 	if(r.length < 5) return;
 	if(cmd.history && cmd.history == true){
@@ -46,7 +52,7 @@ function markp(cmd,canvasname){
     }else if(cmd.evt ==='mouseup'){
 	stateObject.drawing = false;
 	//clear out the msg
-	machine.clearMsgQueue();
+	//machine.clearMsgQueue();
 	
     }else if(cmd.evt ==='mousemove'){
 	if(stateObject.drawing){

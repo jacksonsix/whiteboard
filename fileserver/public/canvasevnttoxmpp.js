@@ -88,18 +88,34 @@ function publishEvt(msg){
     
     msg.jid = mplugin.jid;
     if(msg.type ==='mark' && msg.evt ==='mousemove'){
-	if(msgprocess.mhistory.length >=100){
-	    mmsg ={
+	/*	if(msgprocess.mhistory.length >=100){
+		var res = msgprocess.mhistory.join('\n');
+		console.log(typeof(res) + res);
+		mmsg ={
 		type:'many',
-		records:msgprocess.mhistory
-	    };
-	    mplugin.send(sermsg(mmsg));
-	    msgprocess.mhistory =[];
-	}else{
-	    msgprocess.mhistory.push(msg);
-	}
+		records:res
+		};
+		mplugin.send(sermsg(mmsg));
+		msgprocess.mhistory =[];
+		}else{
+		msgprocess.mhistory.push(sermsg(msg));
+		} */
+	msgprocess.mhistory.push(sermsg(msg));
+	//mplugin.send(sermsg(msg));
 	custEvt(sermsg(msg));
-    }else{
+    }else if(msg.type ==='mark' && msg.evt ==='mouseup'){
+	var res = msgprocess.mhistory.join('\n');
+	var	mmsg ={
+	    type:'many',
+	    records:res
+	};
+
+
+	mplugin.send(sermsg(mmsg));
+	mplugin.send(sermsg(msg));
+	custEvt(sermsg(msg));
+    }
+    else{
 	mplugin.send(sermsg(msg));
 	custEvt(sermsg(msg));
     } 

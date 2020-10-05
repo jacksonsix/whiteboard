@@ -9,7 +9,6 @@ var machine={};
 machine.createnote = null;
 machine.write = null;
 machine.notep = notep;
-machine.interp = interp;
 machine.filep = filep;
 machine.pagep = pagep;
 machine.book ='';
@@ -33,6 +32,30 @@ function manyp(cmd){
 	
     });
     
+}
+
+
+function markp(cmd,canvasname){
+    if(cmd.evt =='mousedown'){
+	stateObject.drawing = true;
+	var xy ={
+	    x:cmd.x,
+	    y:cmd.y
+	};
+	machine.updateUserInfo(cmd.jid,xy);
+    }else if(cmd.evt ==='mouseup'){
+	stateObject.drawing = false;
+	//clear out the msg
+	machine.clearMsgQueue();
+	
+    }else if(cmd.evt ==='mousemove'){
+	if(stateObject.drawing){
+	    //draw line here
+	    machine.highlight(cmd,canvasname);
+	}
+    }else{
+
+    }
 }
 
 function pagep(cmd){
@@ -94,8 +117,8 @@ function clearlist(){
 }
 
 function notep(cmd,canvname){
-    let curName = cmd['name'];
-    let curUser = getUserInfo(curName);
+    //let curName = cmd.jid;
+    //let curUser = machine.getUserInfo(curName);
     if(cmd.type !='note'){return;}
     if(cmd.history && cmd.history==true){
 	//dont save
@@ -142,82 +165,10 @@ function notep(cmd,canvname){
 
 }
 
-function highlight(cmd,canvname){
-    let curName = cmd['name'];
-    let curUser = getUserInfo(curName);
-    if(cmd.type !='note'){return;}
-    dup = document.getElementById(canvname);
-    dupcontext = dup.getContext('2d');
-    //ctx.globalAlpha = 0.4;
-    if(cmd.evt ==='click'){
-	console.log('generate note');
-    }else if(cmd.evt ==='keydown'){
-	cosole.log('send keydown evt to note');
-    }
-
-}
-
 function loadinterp(cmd){
     let c = JSON.parse(cmd);
     
     interp(c);
-}
-
-
-function interp(cmd){
-    let curName = cmd['name'];
-    let curUser = getUserInfo(curName);
-    if(cmd.type !='draw'){return;}
-    dup = document.getElementById("canvas");
-    dupcontext = dup.getContext('2d');
-    if(cmd.evt =='mousedown'){
-	updateUserInfo(curName,cmd);
-        
-    }else if(cmd.evt =='mousemove'){
-	let curUser = getUserInfo(curName);
-	let dupx=curUser.x;
-	let dupy=curUser.y;
-	drawLine(dupcontext, dupx, dupy, cmd.x, cmd.y);
-	let d = {};
-	d.x = cmd.x;
-	d.y = cmd.y;
-	updateUserInfo(curName,d);
-    }else if(cmd.evt =='mouseup'){
-        
-    }else{
-	//
-    }
-
-}
-
-function drawLine(context, x1, y1, x2, y2) {
-    context.beginPath();
-    context.strokeStyle = 'black';
-    context.lineWidth = 1;
-    context.moveTo(x1, y1);
-    context.lineTo(x2, y2);
-    context.stroke();
-    context.closePath();
-}
-
-function getUserInfo(user){
-    if(users[user]  && users[user] != null){
-	return users[user];
-    }else{
-	let a  = {};
-	a.x =0;
-	a.y = 0;
-	users[user] = a;
-	return users[user];
-    }
-}
-
-function updateUserInfo(user,data){
-    let info = getUserInfo(user);
-    info.x = data.x;
-    info.y = data.y;
-    users[user] = info;
-
 }
 
 

@@ -1,4 +1,7 @@
 
+var stateObject={};
+
+
 function flagfunc(){
     let init = false;
     let instance;

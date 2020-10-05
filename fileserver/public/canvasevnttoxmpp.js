@@ -4,7 +4,7 @@
 function installListener(){
 
     const myPics = document.getElementById('canvas');
-
+    let sta = document.getElementById('status');
     myPics.addEventListener('mousedown', e => {
 
 	msg = {
@@ -12,19 +12,30 @@ function installListener(){
 	    ,'x':e.offsetX 
 	    ,'y':e.offsetY
 	};
-	
-	publishEvt(msg);
+
+	let status = sta.value;
+	if(status ==='highlight'){
+	    msg.type = 'mark';
+	    publishEvt(msg);
+	}else{
+
+	}       
+
     });
 
-    myPics.addEventListener('mousemove', e => {
-	
+    myPics.addEventListener('mousemove', e => {	
 	msg = {
 	    'evt':'mousemove'
 	    ,'x': e.offsetX 
 	    ,'y':e.offsetY
-	};	
-	publishEvt(msg);	
-	
+	};
+	let status = sta.value;
+	if(status ==='highlight'){
+	    msg.type = 'mark';
+	    publishEvt(msg);
+	}else{
+
+	}       
     });
 
 
@@ -34,8 +45,18 @@ function installListener(){
 	    'evt':'click'
 	    ,'x':e.offsetX 
 	    ,'y':e.offsetY
-	};	
-	publishEvt(msg);
+	};
+	let status = sta.value;
+	if(status ==='note')
+	{
+	    msg.type = 'note';
+	    publishEvt(msg);
+	    
+	}else{
+
+	}       
+	
+
     });
 
     window.addEventListener('mouseup', e => {	
@@ -44,7 +65,13 @@ function installListener(){
 	    ,'x':e.offsetX 
 	    ,'y':e.offsetY
 	};	
-	publishEvt(msg);
+	let status = sta.value;
+	if(status ==='highlight'){
+	    msg.type = 'mark';
+	    publishEvt(msg);
+	}else{
+
+	}       
     });
     
 
@@ -58,21 +85,24 @@ function installListener(){
 
 
 function publishEvt(msg){	
-    // mhistory.push(msg);
-    // count++;
-    let sta = document.getElementById('status');
-    if(sta.value ==='default'){
-	if(msg.evt =='mousemove' || msg.evt ==='mouseup') {return; }
-    }else if(sta.value ==='note'){
-	if(msg.evt =='mousemove' || msg.evt ==='mouseup'){ return;  }
-	if(msg.type){
-	}else{
-	    msg.type = sta.value;
-	}
-    }    
+    
     msg.jid = mplugin.jid;
-    mplugin.send(sermsg(msg));
-    custEvt(sermsg(msg));
+    if(msg.type ==='mark' && msg.evt ==='mousemove'){
+	if(msgprocess.mhistory.length >=100){
+	    mmsg ={
+		type:'many',
+		records:msgprocess.mhistory
+	    };
+	    mplugin.send(sermsg(mmsg));
+	    msgprocess.mhistory =[];
+	}else{
+	    msgprocess.mhistory.push(msg);
+	}
+	custEvt(sermsg(msg));
+    }else{
+	mplugin.send(sermsg(msg));
+	custEvt(sermsg(msg));
+    } 
     
 }
 
@@ -80,7 +110,18 @@ function custEvt(msg){
     const event = new CustomEvent('localevt', { detail:'<body>$$$'+ msg + '</body>' });
     document.dispatchEvent(event);
 }
-   
+
+function clearMsgQueue(){
+    if(msgprocess.mhistory.length > 0){
+	mmsg ={
+	    type:'many',
+	    records:msgprocess.mhistory
+	};
+	mplugin.send(sermsg(mmsg));
+	msgprocess.mhistory =[];
+    }
+}
+
 
 ///////////////////////////////////////////////////////////////////////////////////////
 
@@ -114,6 +155,7 @@ var msgprocess ={
 	
 	switch(msg.type) {
 	case "mark":
+	    markp(msg,'canvas');
 	    break;
 	case "note":
 	    notep(msg,'canvas');
@@ -144,6 +186,8 @@ var msgprocess ={
     notep:null,
     interp:null,
     publishEvt:publishEvt,
-    custEvt:custEvt
+    custEvt:custEvt,
+    clearMsgQueue:clearMsgQueue,
+    mhistory:[]
 }
 

@@ -40,8 +40,8 @@
       }
 
       li {
-  text-decoration: underline blue;
-}
+	  text-decoration: underline blue;
+      }
     </style>
 
     <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
@@ -76,18 +76,21 @@
     <script src="xmpp.js"></script>
     <script src="canvasevnttoxmpp.js"></script>
     <script src="fakemachine.js"></script>
-     <script src="image.js"></script>
+    <script src="image.js"></script>
     <script src="pdfnote.js"></script>
     <script src="pdfloader.js"></script>
     <script src="msglog.js"></script>
-    <script>
-      uploader.baseUrl = 'http://readbook.eastus.cloudapp.azure.com:8080/users/';
-     // uploader.baseUrl = 'http://localhost:8080/users/';
-      uploader.runOnce();
+    <script src="state.js"></script>
+    <script src="highlight.js"></script>
     
+    <script>
+      // uploader.baseUrl = 'http://readbook.eastus.cloudapp.azure.com:8080/users/';
+      uploader.baseUrl = 'http://' + window.location.host + '/users/';
+      uploader.runOnce();
+      
       //pdfloader  pdfloader.js
-       pdfloader.baseurl = 'http://readbook.eastus.cloudapp.azure.com:8080/users/getbook/';
-      //pdfloader.baseurl = 'http://localhost:8080/users/getbook/';
+      //pdfloader.baseurl = 'http://readbook.eastus.cloudapp.azure.com:8080/users/getbook/';
+      pdfloader.baseurl = 'http://'+ window.location.host +  '/users/getbook/';
       pdfloader.workerSrc = 'pdf.worker.js';
       pdfloader.runOnce();
 
@@ -96,16 +99,24 @@
       // machine : fakemachine.js
       // pdfnote : pdfnote.js
       // logger : msglog.js
+      // stateObject state.js
+      // highlighter  highlight.js
       
       mplugin.outmessage = msgprocess.msghandler;
       msgprocess.installListener();
+
       msgprocess.notep = machine.notep;
       msgprocess.interp = machine.interp;
       msgprocess.filep = machine.filep;
       msgprocess.pagep = machine.pagep;
+
       machine.createnote = pdfnote.createnote;
       machine.write = pdfnote.write;
       machine.writehistory = pdfnote.writehistory;
+      machine.highlight = highlighter.highlight;
+      machine.updateUserInfo = highlighter.updateUserInfo;
+      machine.clearMsgQueue = msgprocess.clearMsgQueue;
+      
     </script>
   </body>
 </html>

@@ -1,0 +1,6 @@
+var highlighter={
+    highlight: function(cmd,canvasname){
+    },
+};
+
+

@@ -27,7 +27,7 @@ function addTextBox(left,top){
     can.id = 't' + t.id;
     can.autocomplete="off";
     can.addEventListener('keyup',function(evt){
-	let ta = document.getElementById(cmd.id);
+	let ta = document.getElementById(can.id);
 	msg = {
 	    'evt':'keyup'
 	    ,'key':evt.key 

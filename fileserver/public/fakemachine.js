@@ -165,25 +165,7 @@ function notep(cmd,canvname){
 	machine.createnote(cmd,canvname);
     }else if(cmd.evt ==='keyup'){
         // generate another evt, so can read textarea value
-	var msg={
-	    evt:'textchange',
-	    id: cmd.id,
-	    type:'note'
-	};
-	let ta = document.getElementById(cmd.id);
-	console.log('keyup test value' + ta.value);
-	custEvt(msgprocess.sermsg(msg));
-    }else if(cmd.evt ==='textchange'){
-	let ta = document.getElementById(cmd.id);
-	var msg={
-	    evt:'textvalue',
-	    text:ta.value,
-	    id: cmd.id,
-	    type:'note'
-	};
-	publishEvt(msg);
 
-    }else if(cmd.evt ==='textvalue'){
 	if(cmd.history){
 	    machine.writehistory(cmd);
 	}else{

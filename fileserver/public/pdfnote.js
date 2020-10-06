@@ -27,15 +27,18 @@ function addTextBox(left,top){
     can.id = 't' + t.id;
     can.autocomplete="off";
     can.addEventListener('keyup',function(evt){
+	let ta = document.getElementById(cmd.id);
 	msg = {
 	    'evt':'keyup'
 	    ,'key':evt.key 
 	    ,'keyCode':evt.keyCode
 	    ,'id':can.id
 	    ,'type':'note'
+	    ,'text': ta.value
+	    
 	};
-	custEvt(msgprocess.sermsg(msg));
-	//publishEvt(msg);
+	//custEvt(msgprocess.sermsg(msg));
+	publishEvt(msg);
     });
     let point = document.createElement("div");
     point.classList.add('leftcorner');

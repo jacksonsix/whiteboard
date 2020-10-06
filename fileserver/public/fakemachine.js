@@ -158,14 +158,13 @@ function notep(cmd,canvname){
     if(cmd.history && cmd.history==true){
 	//dont save
     }else{
-	if(cmd.evt !=='loadnote' && cmd.evt !=='keyup' && cmd.evt !='textchange')
+	if(cmd.evt !=='loadnote')
 	    logger.savenote(machine.book,machine.pagenum,msgprocess.sermsg(cmd));
     }
     if(cmd.evt ==='newnote'){
 	machine.createnote(cmd,canvname);
     }else if(cmd.evt ==='keyup'){
-        // generate another evt, so can read textarea value
-
+       
 	if(cmd.history){
 	    machine.writehistory(cmd);
 	}else{

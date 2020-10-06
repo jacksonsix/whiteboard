@@ -37,7 +37,7 @@ function addTextBox(left,top){
 	    ,'text': ta.value
 	    
 	};
-	//custEvt(msgprocess.sermsg(msg));
+
 	publishEvt(msg);
     });
     let point = document.createElement("div");

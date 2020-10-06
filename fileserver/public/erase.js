@@ -1,13 +1,13 @@
-var highlighter={
+var eraser={
     users:{},
     highlight: function(cmd,canvasname){
 	
 	let curName = cmd['jid'];
-	let curUser = highlighter.getUserInfo(curName);
+	let curUser = eraser.getUserInfo(curName);
 
 	dup = document.getElementById(canvasname);
 	dupcontext = dup.getContext('2d');
-	highlighter.highlightLine(dupcontext, curUser.x, curUser.y, cmd.x, cmd.y);
+	eraser.highlightLine(dupcontext, curUser.x, curUser.y, cmd.x, cmd.y);
 	let d = {};
 	d.x = cmd.x;
 	d.y = cmd.y;
@@ -15,19 +15,6 @@ var highlighter={
 
     },
 
-    eraseline: function(cmd,canvasname ){
-	let curName = cmd['jid'];
-	let curUser = highlighter.getUserInfo(curName);
-
-	dup = document.getElementById(canvasname);
-	dupcontext = dup.getContext('2d');
-	highlighter.eraseLine(dupcontext, curUser.x, curUser.y, cmd.x, cmd.y);
-	let d = {};
-	d.x = cmd.x;
-	d.y = cmd.y;
-	highlighter.updateUserInfo(curName,d);
-    },
-    
     drawLine: function (context, x1, y1, x2, y2) {
 	context.beginPath();
 	context.strokeStyle = 'black';
@@ -47,11 +34,6 @@ var highlighter={
 	context.stroke();
 	context.closePath();
     },
-
-    eraseLine: function (context, x1, y1, x2, y2) {
-    //
-    },
-
 
     getUserInfo:function (user){
 	if(highlighter.users[user]  && highlighter.users[user] != null){

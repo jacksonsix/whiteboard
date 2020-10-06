@@ -1,6 +1,8 @@
 
 // get event out
 
+// build high level event from primes
+
 function installListener(){
 
     const myPics = document.getElementById('canvas');
@@ -16,9 +18,12 @@ function installListener(){
 	let status = sta.value;
 	if(status ==='highlight'){
 	    msg.type = 'mark';
+	    msg.evt ='stlight'
 	    publishEvt(msg);
-	}else{
-
+	}else if(status ==='erase'){
+	    msg.type = 'eras';
+	    msg.evt ='sterase';
+	    publishEvt(msg);
 	}       
 
     });
@@ -32,9 +37,12 @@ function installListener(){
 	let status = sta.value;
 	if(status ==='highlight' && stateObject.drawing){
 	    msg.type = 'mark';
+	    msg.evt ='lighto';
 	    publishEvt(msg);
-	}else{
-
+	}else if(status ==='erase') {
+	    msg.type = 'eras';
+	    msg.evt = 'eraseto';
+	    publishEvt(msg);
 	}       
     });
 
@@ -50,12 +58,10 @@ function installListener(){
 	if(status ==='note')
 	{
 	    msg.type = 'note';
+	    msg.evt ='newnote'
 	    publishEvt(msg);
 	    
-	}else{
-
-	}       
-	
+	}
 
     });
 
@@ -68,9 +74,11 @@ function installListener(){
 	let status = sta.value;
 	if(status ==='highlight'){
 	    msg.type = 'mark';
+	    msg.evt = 'endlight';
 	    publishEvt(msg);
-	}else{
-
+	}else if(status ==='erase'){
+	    msg.type ='eras';
+	    msg.evt = 'enderase'
 	}       
     });
     
@@ -87,7 +95,7 @@ function installListener(){
 function publishEvt(msg){	
     
     msg.jid = mplugin.jid;
-    if(msg.type ==='mark' && msg.evt ==='mousemove'){
+    if(msg.type ==='mark' && msg.evt ==='lighto'){
 	// make small message for remote
 	var sm ={
 	    x:msg.x,
@@ -95,14 +103,38 @@ function publishEvt(msg){
 	};
 	msgprocess.mhistory.push(sermsg(sm));
 	custEvt(sermsg(msg));
-    }else if(msg.type ==='mark' && msg.evt ==='mouseup'){
+    }else if(msg.type ==='eras' && msg.evt ==='eraseto'){
+	var sm ={
+	    x:msg.x,
+	    y:msg.y	  
+	};
+	msgprocess.mhistory.push(sermsg(sm));
+	custEvt(sermsg(msg));
+	
+    } else if(msg.type ==='mark' && msg.evt ==='endlight'){
 	var res = msgprocess.mhistory.join('\n');
 	var mmsg ={
 	    type:'many',
 	    records:res,
-	    jid:msg.jid
+	    jid:msg.jid,
+	    evt: 'lighto',
+	    evtype: 'mark'
 	};
 
+	mplugin.send(sermsg(mmsg));
+	msgprocess.no = 0;
+	msgprocess.mhistory =[];
+	mplugin.send(sermsg(msg));
+	custEvt(sermsg(msg));
+    }else if(msg.type ==='eras' && msg.evt ==='enderase'){
+	var res = msgprocess.mhistory.join('\n');
+	var mmsg ={
+	    type:'many',
+	    records: res,
+	    jid: msg.jid,
+	    evt: 'eraseto',
+	    evtype: 'eras'
+	};
 
 	mplugin.send(sermsg(mmsg));
 	msgprocess.no = 0;

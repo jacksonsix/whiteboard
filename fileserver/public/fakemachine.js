@@ -9,6 +9,7 @@ var machine={};
 machine.createnote = null;
 machine.write = null;
 machine.notep = notep;
+machine.erasep = erasep;
 machine.filep = filep;
 machine.pagep = pagep;
 machine.book ='';
@@ -35,8 +36,8 @@ function manyp(cmd){
 	}else{
 	    var obj = JSON.parse(r);
 	    if(typeof(obj.type) ==='undefined'){
-		obj.type ='mark';
-		obj.evt ='mousemove';
+		obj.type = cmd.evtype;
+		obj.evt =  cmd.evt;
 		obj.jid = cmd.jid;
 		custEvt( msgprocess.sermsg(obj));	 
 	    }else{
@@ -51,22 +52,42 @@ function manyp(cmd){
 
 
 function markp(cmd,canvasname){
-    if(cmd.evt =='mousedown'){
+    if(cmd.evt =='stlight'){
 	stateObject.drawing = true;
 	var xy ={
 	    x:cmd.x,
 	    y:cmd.y
 	};
 	machine.updateUserInfo(cmd.jid,xy);
-    }else if(cmd.evt ==='mouseup'){
+    }else if(cmd.evt ==='endlight'){
 	stateObject.drawing = false;
-	//clear out the msg
-	//machine.clearMsgQueue();
-	
-    }else if(cmd.evt ==='mousemove'){
+
+    }else if(cmd.evt ==='lighto'){
 	if(stateObject.drawing){
 	    //draw line here
 	    machine.highlight(cmd,canvasname);
+	}
+    }else{
+
+    }
+}
+
+
+function erasep(cmd,canvasname){
+    if(cmd.evt =='sterase'){
+	stateObject.drawing = true;
+	var xy ={
+	    x:cmd.x,
+	    y:cmd.y
+	};
+	machine.updateUserInfo(cmd.jid,xy);
+    }else if(cmd.evt ==='enderase'){
+	stateObject.drawing = false;
+
+    }else if(cmd.evt ==='eraseto'){
+	if(stateObject.drawing){
+	    //draw line here
+	    machine.erase(cmd,canvasname);
 	}
     }else{
 
@@ -141,7 +162,7 @@ function notep(cmd,canvname){
 	if(cmd.evt !=='loadnote' && cmd.evt !=='keyup' && cmd.evt !='textchange')
 	    logger.savenote(machine.book,machine.pagenum,msgprocess.sermsg(cmd));
     }
-    if(cmd.evt ==='click'){
+    if(cmd.evt ==='newnote'){
 	machine.createnote(cmd,canvname);
     }else if(cmd.evt ==='keyup'){
         // generate another evt, so can read textarea value

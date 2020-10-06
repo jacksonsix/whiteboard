@@ -153,8 +153,7 @@ function clearlist(){
 }
 
 function notep(cmd,canvname){
-    //let curName = cmd.jid;
-    //let curUser = machine.getUserInfo(curName);
+  
     if(cmd.type !='note'){return;}
     if(cmd.history && cmd.history==true){
 	//dont save
@@ -171,6 +170,8 @@ function notep(cmd,canvname){
 	    id: cmd.id,
 	    type:'note'
 	};
+	let ta = document.getElementById(cmd.id);
+	console.log('keyup test value' + ta.value);
 	custEvt(msgprocess.sermsg(msg));
     }else if(cmd.evt ==='textchange'){
 	let ta = document.getElementById(cmd.id);

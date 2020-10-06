@@ -111,7 +111,7 @@ function publishEvt(msg){
 	msgprocess.mhistory.push(sermsg(sm));
 	custEvt(sermsg(msg));
 	
-    } else if(msg.type ==='mark' && msg.evt ==='endlight'){
+    }else if(msg.type ==='mark' && msg.evt ==='endlight'){
 	var res = msgprocess.mhistory.join('\n');
 	var mmsg ={
 	    type:'many',

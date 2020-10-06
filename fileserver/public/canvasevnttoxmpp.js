@@ -190,7 +190,6 @@ var msgprocess ={
     interp:null,
     publishEvt:publishEvt,
     custEvt:custEvt,
-    clearMsgQueue:clearMsgQueue,
     mhistory:[],
     no:0
 }

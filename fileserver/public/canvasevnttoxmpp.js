@@ -88,21 +88,19 @@ function publishEvt(msg){
     
     msg.jid = mplugin.jid;
     if(msg.type ==='mark' && msg.evt ==='mousemove'){
-
-	//msg.no = msgprocess.no++;
 	// make small message for remote
 	var sm ={
 	    x:msg.x,
-	    y:msg.y,
-	    jid:msg.jid
+	    y:msg.y	  
 	};
 	msgprocess.mhistory.push(sermsg(sm));
 	custEvt(sermsg(msg));
     }else if(msg.type ==='mark' && msg.evt ==='mouseup'){
 	var res = msgprocess.mhistory.join('\n');
-	var	mmsg ={
+	var mmsg ={
 	    type:'many',
-	    records:res
+	    records:res,
+	    jid:msg.jid
 	};
 
 

@@ -36,7 +36,8 @@ function manyp(cmd){
 	    var obj = JSON.parse(r);
 	    if(typeof(obj.type) ==='undefined'){
 		obj.type ='mark';
-		obj.evt ='mousemove'
+		obj.evt ='mousemove';
+		obj.jid = cmd.jid;
 		custEvt( msgprocess.sermsg(obj));	 
 	    }else{
 		custEvt(r);	 

@@ -32,7 +32,11 @@ function manyp(cmd){
 	    obj.history = true;
 	    custEvt( msgprocess.sermsg(obj));
 	    
-	}else{   
+	}else{
+	    if(typeof(r.type) ==='undefined'){
+		r.type ='mark';
+		r.evt ='mousemove'
+	    }
 	    custEvt(r);	    
 	}
 	

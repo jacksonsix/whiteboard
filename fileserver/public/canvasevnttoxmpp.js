@@ -88,22 +88,15 @@ function publishEvt(msg){
     
     msg.jid = mplugin.jid;
     if(msg.type ==='mark' && msg.evt ==='mousemove'){
-	/*	if(msgprocess.mhistory.length >=100){
-		var res = msgprocess.mhistory.join('\n');
-		console.log(typeof(res) + res);
-		mmsg ={
-		type:'many',
-		records:res
-		};
-		mplugin.send(sermsg(mmsg));
-		msgprocess.mhistory =[];
-		}else{
-		msgprocess.mhistory.push(sermsg(msg));
-		} */
-	msg.no = msgprocess.no++;
-	
-	msgprocess.mhistory.push(sermsg(msg));
-	//mplugin.send(sermsg(msg));
+
+	//msg.no = msgprocess.no++;
+	// make small message for remote
+	var sm ={
+	    x:msg.x,
+	    y:msg.y,
+	    jid:msg.jid
+	};
+	msgprocess.mhistory.push(sermsg(sm));
 	custEvt(sermsg(msg));
     }else if(msg.type ==='mark' && msg.evt ==='mouseup'){
 	var res = msgprocess.mhistory.join('\n');
@@ -131,16 +124,6 @@ function custEvt(msg){
     document.dispatchEvent(event);
 }
 
-function clearMsgQueue(){
-    if(msgprocess.mhistory.length > 0){
-	mmsg ={
-	    type:'many',
-	    records:msgprocess.mhistory
-	};
-	mplugin.send(sermsg(mmsg));
-	msgprocess.mhistory =[];
-    }
-}
 
 
 ///////////////////////////////////////////////////////////////////////////////////////

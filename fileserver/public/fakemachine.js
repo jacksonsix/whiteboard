@@ -33,11 +33,15 @@ function manyp(cmd){
 	    custEvt( msgprocess.sermsg(obj));
 	    
 	}else{
-	    if(typeof(r.type) ==='undefined'){
-		r.type ='mark';
-		r.evt ='mousemove'
+	    var obj = JSON.parse(r);
+	    if(typeof(obj.type) ==='undefined'){
+		obj.type ='mark';
+		obj.evt ='mousemove'
+		custEvt( msgprocess.sermsg(obj));	 
+	    }else{
+		custEvt(r);	 
 	    }
-	    custEvt(r);	    
+	    
 	}
 	
     });

@@ -55,10 +55,10 @@ function runOnce(){
     var page = document.getElementById('page');
     page.addEventListener('change',function(evt){
 	var p = page.value;
-	var pn =0;
+	var pn = 1;
 	const parsed = parseInt(p);
         if (isNaN(parsed)) {
-	    pn= 0;
+	    pn= 1;
 	}else{
 	    pn = parsed;
 	}

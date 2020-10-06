@@ -115,7 +115,13 @@ function pagep(cmd){
 	    book: machine.book,
 	    pagenum: machine.pagenum
 	};
-	publishEvt(msg);
+	// check if msg from self publish, from other then localevt
+	if(msg.jid === mplugin.jid){
+	    publishEvt(msg);
+	}else{
+	    custEvt(msgprocess.sermsg(msg));
+	}
+
 
     }
 }

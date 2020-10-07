@@ -44,7 +44,7 @@
     converse.initialize({
         bosh_service_url: 'http://readbook.eastus.cloudapp.azure.com:5443/bosh', // Please use this connection manager only for testing purposes
         //websocket_url: 'ws://readbook.eastus.cloudapp.azure.com:5443/ws/',
-	auto_join_rooms: [{'jid': 'chat1@conference.readbook.eastus.cloudapp.azure.com','nick': this._converse.api.user.jid() , 'minimized': true }],
+	auto_join_rooms: [{'jid': 'chat1@conference.readbook.eastus.cloudapp.azure.com','nick': 'u'+Math.floor(Math.random() * 100) , 'minimized': true }],
 	show_controlbox_by_default: true,
 	whitelisted_plugins: ['myplugin']
     });

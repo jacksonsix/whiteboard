@@ -172,7 +172,14 @@ function extractmsg(xml){
     var start = xml.indexOf('>') + 1;
     var end = xml.indexOf('</body>');
     var msg = xml.substring(start,end);
-    return msg.substring(3);
+    // check if starts with $$$
+    var head = msg.substring(0,3);
+    if(head ==='$$$'){
+       return msg.substring(3);
+    }else{
+	return null;
+    }
+   
 }
 
 
@@ -182,8 +189,8 @@ var msgprocess ={
     msghandler: function msghandler(evt) {
 	console.log('process: ' +evt);
 	
-	var text = "";
 	var info = extractmsg(evt);
+	if(info == null){ return ; }
 	var msg =JSON.parse(info);
 	
 	switch(msg.type) {
@@ -207,10 +214,6 @@ var msgprocess ={
             break;
 	default:
 	    break;
-
-	    if (text.length) {
-		f.write(text);
-	    }
 	};
 	
     },

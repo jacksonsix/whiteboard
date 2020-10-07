@@ -20,34 +20,31 @@
 		}
             },
 	    send: function(txt){
-		var me = _converse.api.user.jid();
-		me = me.substring(0,me.indexOf('@'));
+		var curjid = _converse.api.user.jid();
+		me = curjid.substring(0,me.indexOf('@'));
 		this.jid = me;
 		var fromp = '';
 		var top ='';
 		//var domain = Strophe.getDomainFromJid(Hello.connection.jid);
-
-		if(me ==='demi'){
-		    fromp ='demi@readbook.eastus.cloudapp.azure.com';
-		    top = 'jianlong@readbook.eastus.cloudapp.azure.com';
-		}else{
-		    top ='demi@readbook.eastus.cloudapp.azure.com';
-		    fromp = 'jianlong@readbook.eastus.cloudapp.azure.com';
-		}
-		var msg = converse.env.$msg({from: fromp, to: top, type: 'chat'})
+		
+		top ='chat1@conference.readbook.eastus.cloudapp.azure.com';
+		fromp = curjid;
+		
+		var msg = converse.env.$msg({from: fromp, to: top, type: 'groupchat'})
 		    .c('body')
 		    .t('$$$' + txt);
 		_converse.api.send(msg);	
-	
+		
 	    },
 	    outmessage: onmessage,
-	   
+	    
 	};
 
     converse.plugins.add('myplugin', mplugin);
     converse.initialize({
         bosh_service_url: 'http://readbook.eastus.cloudapp.azure.com:5443/bosh', // Please use this connection manager only for testing purposes
         //websocket_url: 'ws://readbook.eastus.cloudapp.azure.com:5443/ws/',
+	auto_join_rooms: {'jid': 'chat1@conference.readbook.eastus.cloudapp.azure.com', 'minimized': true },
 	show_controlbox_by_default: true,
 	whitelisted_plugins: ['myplugin']
     });

@@ -21,7 +21,7 @@
             },
 	    send: function(txt){
 		var curjid = _converse.api.user.jid();
-		me = curjid.substring(0,me.indexOf('@'));
+		me = curjid.substring(0,curjid.indexOf('@'));
 		this.jid = me;
 		var fromp = '';
 		var top ='';
